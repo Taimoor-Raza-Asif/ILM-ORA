@@ -159,7 +159,7 @@ export const Dashboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Activity className="w-5 h-5 text-primary" />
-                Your Learning Progress
+                Your Exploration Progress
               </CardTitle>
               <CardDescription>Track your journey towards career clarity</CardDescription>
             </CardHeader>

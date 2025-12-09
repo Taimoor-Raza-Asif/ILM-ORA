@@ -46,7 +46,7 @@ export function LandingPage() {
   }];
   return (
     <div className="min-h-screen">
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-20 px-4">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-8 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">

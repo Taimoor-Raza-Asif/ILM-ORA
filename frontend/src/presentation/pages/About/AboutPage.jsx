@@ -220,7 +220,7 @@ export function AboutPage() {
                     <Input
                       id="name"
                       name="name"
-                      placeholder="John Doe"
+                      placeholder="Taimoor Raza Asif"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -233,7 +233,7 @@ export function AboutPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="raza@example.com"
                       value={formData.email}
                       onChange={handleInputChange}
                       required

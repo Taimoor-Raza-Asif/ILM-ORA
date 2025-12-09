@@ -7,7 +7,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Card } from "@/shared/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import { GraduationCap, Mail, Lock, User } from "lucide-react";
+import { GraduationCap, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { ImageWithFallback } from "@/shared/components/ImageWithFallback";
 
 // export function AuthPage() {
@@ -130,7 +130,19 @@ export function AuthPage() {
     <div className="min-h-screen flex">
       {/* Left Side - Image/Brand */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary/90 to-accent relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-8 left-4 z-50 pointer-events-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-2 text-white hover:bg-white/10"
+            type="button"
+            onClick={() => navigate("/home")}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
+        </div>
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1620650764255-6797e68c7904?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMHN0dWR5aW5nJTIwdW5pdmVyc2l0eXxlbnwxfHx8fDE3NjAyMDQ1ODd8MA&ixlib=rb-4.1.0&q=80&w=1080"
             alt="Students"
@@ -167,6 +179,20 @@ export function AuthPage() {
       {/* Right Side - Forms */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-md">
+          {/* Mobile back button */}
+          <div className="mb-4 lg:hidden flex">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              type="button"
+              onClick={() => navigate("/home")}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+          </div>
+
           <div className="mb-8 lg:hidden text-center">
             <div className="inline-flex items-center gap-2 mb-4">
               <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">

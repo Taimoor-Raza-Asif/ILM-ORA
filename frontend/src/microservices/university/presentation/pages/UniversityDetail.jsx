@@ -303,7 +303,6 @@ export function UniversityDetail() {
         <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-wrap gap-3 mb-4">
-              <Badge variant="secondary" className="text-lg">#1 in Pakistan</Badge>
               <Badge className="bg-green-600">
                 <Sparkles className="w-4 h-4 mr-2" /> AI Insights Live
               </Badge>
