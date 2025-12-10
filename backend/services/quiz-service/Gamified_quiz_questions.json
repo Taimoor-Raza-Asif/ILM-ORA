@@ -3,7 +3,7 @@
     {
       "id": "R1",
       "dimension": "R",
-      "gamified_text": "Your motorbike breaks down. Do you grab your toolkit and repair it?",
+      "gamified_text": "Your motorbike breaks down. Do you grab your toolkit and try to repair it yourself?",
       "options": [
         1,
         2,
@@ -15,7 +15,7 @@
     {
       "id": "R2",
       "dimension": "R",
-      "gamified_text": "You’re offered a day outdoors. Do you choose farming and gardening?",
+      "gamified_text": "You’re offered a day outdoors to work on a farm. Do you accept the challenge?",
       "options": [
         1,
         2,
@@ -39,7 +39,7 @@
     {
       "id": "R4",
       "dimension": "R",
-      "gamified_text": "A washing machine stops working. Do you try to troubleshoot or fix it?",
+      "gamified_text": "A washing machine stops working. Do you try to troubleshoot the mechanical problem?",
       "options": [
         1,
         2,
@@ -51,7 +51,7 @@
     {
       "id": "R5",
       "dimension": "R",
-      "gamified_text": "You enter a machine workshop. Do you feel thrilled operating machines?",
+      "gamified_text": "You enter a machine workshop. Do you feel thrilled at the idea of operating the heavy machinery?",
       "options": [
         1,
         2,
@@ -63,7 +63,7 @@
     {
       "id": "R6",
       "dimension": "R",
-      "gamified_text": "You’re at a farm for a day you take the initiative to repair a broken fence post.",
+      "gamified_text": "In a group quest, others write the plan, but you propose building a real model. Do you push for this hands-on action?",
       "options": [
         1,
         2,
@@ -75,7 +75,7 @@
     {
       "id": "R7",
       "dimension": "R",
-      "gamified_text": "A friend’s computer isn’t working You feel excited to open it up and inspect?",
+      "gamified_text": "You’re at a farm for a day. Do you take the initiative to repair a broken fence post?",
       "options": [
         1,
         2,
@@ -87,7 +87,7 @@
     {
       "id": "R8",
       "dimension": "R",
-      "gamified_text": "You find an old bicycle in the garage and decide to restore it to working condition.",
+      "gamified_text": "A friend’s computer isn’t working. Do you feel excited to open the case and inspect the hardware?",
       "options": [
         1,
         2,
@@ -99,7 +99,7 @@
     {
       "id": "R9",
       "dimension": "R",
-      "gamified_text": "During a survival camp, you enjoy constructing your own small shelter.",
+      "gamified_text": "You find an old bicycle in the garage. Do you decide to restore it to working condition?",
       "options": [
         1,
         2,
@@ -111,7 +111,7 @@
     {
       "id": "R10",
       "dimension": "R",
-      "gamified_text": "You are in a sculpture class. How much do you enjoy the process of taking a block of wood or a piece of metal and shaping it with tools into a finished form?",
+      "gamified_text": "During a survival camp, do you enjoy the task of constructing your own shelter?",
       "options": [
         1,
         2,
@@ -123,7 +123,7 @@
     {
       "id": "R11",
       "dimension": "R",
-      "gamified_text": "Your kitchen blender starts making a strange grinding noise. What is your first instinct? 1) Unplug it, take it apart, and try to find the problem, or 2) Start shopping for a new one.",
+      "gamified_text": "You're volunteering to build sets for a play. Do you volunteer to operate the electric saws and drills?",
       "options": [
         1,
         2,
@@ -135,7 +135,7 @@
     {
       "id": "R12",
       "dimension": "R",
-      "gamified_text": "You're given a small, empty patch of soil at your community garden. How much do you look forward to the task of planning, digging, planting, and weeding it to grow your own vegetables?",
+      "gamified_text": "Your friend's bicycle chain keeps falling off. Do you enjoy the idea of spending the afternoon fixing it?",
       "options": [
         1,
         2,
@@ -147,7 +147,7 @@
     {
       "id": "R13",
       "dimension": "R",
-      "gamified_text": "When a simple household item breaks (like a loose cabinet handle or a wobbly chair), how likely are you to find the tools and fix it yourself rather than asking someone else to do it?",
+      "gamified_text": "You are planning a vacation. Does a hiking trip with physical activity sound appealing?",
       "options": [
         1,
         2,
@@ -159,7 +159,7 @@
     {
       "id": "R14",
       "dimension": "R",
-      "gamified_text": "You have a large lawn to mow. How satisfying do you find the task of using a lawnmower to complete the job efficiently and see the clean, finished result?",
+      "gamified_text": "You buy a complex desk with a diagram-only manual. Do you feel confident building it?",
       "options": [
         1,
         2,
@@ -171,7 +171,7 @@
     {
       "id": "R15",
       "dimension": "R",
-      "gamified_text": "Imagine you have just successfully fixed a leaky pipe under your sink after 3 hours of work. How high is your feeling of personal accomplishment?",
+      "gamified_text": "Would you prefer working as a park ranger maintaining trails over an office job?",
       "options": [
         1,
         2,
@@ -183,7 +183,7 @@
     {
       "id": "R16",
       "dimension": "R",
-      "gamified_text": "How important is it to you that a future job involves being physically active (moving, lifting, building) rather than sitting at a desk?",
+      "gamified_text": "Your team is debating theories. Do you have an urge to stop talking and build a prototype?",
       "options": [
         1,
         2,
@@ -195,7 +195,7 @@
     {
       "id": "R17",
       "dimension": "R",
-      "gamified_text": "You're working on a car, and you run into a problem you've never seen before. How motivated are you to stay with the problem, using trial and error, until you figure it out on your own?",
+      "gamified_text": "You're in a pottery studio. Are you excited to get your hands messy and shape the clay?",
       "options": [
         1,
         2,
@@ -207,7 +207,151 @@
     {
       "id": "R18",
       "dimension": "R",
-      "gamified_text": "If given a choice in school, would you prefer to take a class on small engine repair or a class on poetry analysis?",
+      "gamified_text": "In a sculpture class, do you enjoy shaping a block of wood with tools?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R19",
+      "dimension": "R",
+      "gamified_text": "Your kitchen blender makes a strange noise. Is your first instinct to take it apart to find the problem?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R20",
+      "dimension": "R",
+      "gamified_text": "Your controller has a sticky button. Do you have an urge to disassemble it and fix it yourself?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R21",
+      "dimension": "R",
+      "gamified_text": "You're given a patch of soil. Do you look forward to the physical work of digging and planting?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R22",
+      "dimension": "R",
+      "gamified_text": "A cabinet handle is loose. Do you find a screwdriver to fix it immediately?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R23",
+      "dimension": "R",
+      "gamified_text": "You have a large lawn to mow. Do you find the task of operating the mower satisfying?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R24",
+      "dimension": "R",
+      "gamified_text": "You just fixed a leaky pipe after 3 hours of work. Do you feel a high sense of accomplishment?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R25",
+      "dimension": "R",
+      "gamified_text": "Is it important that your future job involves being physically active rather than sitting?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R26",
+      "dimension": "R",
+      "gamified_text": "You're fixing a car and hit a snag. Are you motivated to use trial and error until you solve it?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R27",
+      "dimension": "R",
+      "gamified_text": "Do you feel comfortable in environments like a mechanic's garage surrounded by tools?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R28",
+      "dimension": "R",
+      "gamified_text": "Do you feel more satisfied completing a physical task like building a shelf than writing a report?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R29",
+      "dimension": "R",
+      "gamified_text": "Would you prefer to take a class on small engine repair over poetry analysis?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "R30",
+      "dimension": "R",
+      "gamified_text": "You see a model kit for a starship requiring soldering. Is this technical project appealing?",
       "options": [
         1,
         2,
@@ -219,7 +363,7 @@
     {
       "id": "I1",
       "dimension": "I",
-      "gamified_text": "A tricky puzzle blocks your path. Do you enjoy solving it even if it takes hours?",
+      "gamified_text": "A tricky puzzle blocks your path. Do you enjoy the process of solving it?",
       "options": [
         1,
         2,
@@ -231,7 +375,7 @@
     {
       "id": "I2",
       "dimension": "I",
-      "gamified_text": "You find a set of mysterious potions. Do you mix them carefully to see what happens?",
+      "gamified_text": "You find a set of mysterious potions. Do you carefully mix them to observe the reaction?",
       "options": [
         1,
         2,
@@ -243,7 +387,7 @@
     {
       "id": "I3",
       "dimension": "I",
-      "gamified_text": "Exam results reveal a weird marking pattern. Do you investigate the hidden cause?",
+      "gamified_text": "Exam results reveal a weird marking pattern. Are you motivated to investigate the cause?",
       "options": [
         1,
         2,
@@ -255,7 +399,7 @@
     {
       "id": "I4",
       "dimension": "I",
-      "gamified_text": "A debate about the beginning of the universe starts. Do you jump in with logic and evidence regarding it?",
+      "gamified_text": "A debate about the universe starts. do you jump in with scientific evidence?",
       "options": [
         1,
         2,
@@ -267,7 +411,7 @@
     {
       "id": "I5",
       "dimension": "I",
-      "gamified_text": "You’re handed graphs and numbers. Do you enjoy decoding their hidden meaning?",
+      "gamified_text": "You’re handed graphs and numbers. Do you enjoy decoding their meaning?",
       "options": [
         1,
         2,
@@ -279,7 +423,7 @@
     {
       "id": "I6",
       "dimension": "I",
-      "gamified_text": "Someone asks, “Why does lightning strike?” Do you research until you uncover the truth?",
+      "gamified_text": "Someone asks, 'Why does lightning strike?' Do you research until you find the exact answer?",
       "options": [
         1,
         2,
@@ -291,7 +435,7 @@
     {
       "id": "I7",
       "dimension": "I",
-      "gamified_text": "When you find an old map with symbols, you feel determined to decode it.",
+      "gamified_text": "You find an old map with symbols. Are you determined to decode it?",
       "options": [
         1,
         2,
@@ -303,7 +447,7 @@
     {
       "id": "I8",
       "dimension": "I",
-      "gamified_text": "When a machine malfunctions, you examine it to discover the cause.",
+      "gamified_text": "A machine malfunctions. Do you examine it primarily to understand *why* it failed?",
       "options": [
         1,
         2,
@@ -315,7 +459,7 @@
     {
       "id": "I9",
       "dimension": "I",
-      "gamified_text": "When you get a telescope on a clear night, you use it to observe the stars.",
+      "gamified_text": "You get a telescope. Do you use it to observe and track star movements?",
       "options": [
         1,
         2,
@@ -327,7 +471,7 @@
     {
       "id": "I10",
       "dimension": "I",
-      "gamified_text": "When you see an unfamiliar insect, you research to identify its type.",
+      "gamified_text": "You see an unfamiliar insect. Do you research to identify its exact species?",
       "options": [
         1,
         2,
@@ -339,7 +483,7 @@
     {
       "id": "I11",
       "dimension": "I",
-      "gamified_text": "You're shown a complex spreadsheet full of a company's sales data, with charts and equations. How much do you enjoy the task of analyzing these numbers to understand the business's performance?",
+      "gamified_text": "You want a new app feature. Do you spend the weekend learning code to build it yourself?",
       "options": [
         1,
         2,
@@ -351,7 +495,7 @@
     {
       "id": "I12",
       "dimension": "I",
-      "gamified_text": "You are given a 50-page technical report detailing the results of a new medical study. How interested are you in reading and analyzing the 'Methodology' and 'Results' sections to see if their conclusions are valid?",
+      "gamified_text": "At a party, someone brings a complex puzzle box. Are you eager to focus on cracking it?",
       "options": [
         1,
         2,
@@ -363,7 +507,7 @@
     {
       "id": "I13",
       "dimension": "I",
-      "gamified_text": "When you're learning a new skill, how much do you enjoy the part where you have to use critical thinking and analysis to solve problems, versus just following instructions?",
+      "gamified_text": "You're a detective with a folder of random data. Is the challenge of finding a pattern appealing?",
       "options": [
         1,
         2,
@@ -375,7 +519,7 @@
     {
       "id": "I14",
       "dimension": "I",
-      "gamified_text": "How likely are you to spend a free hour watching a documentary about a new scientific discovery (like gene-editing or space exploration) instead of a comedy or drama?",
+      "gamified_text": "Would you choose 'Principles of Physics' as an elective just to understand the subject?",
       "options": [
         1,
         2,
@@ -387,7 +531,7 @@
     {
       "id": "I15",
       "dimension": "I",
-      "gamified_text": "You're on a website and see a link for 'Daily Brain Teasers & Logic Puzzles.' How tempted are you to click it and try to solve one?",
+      "gamified_text": "Your computer is slow. Do you appreciate using a 15-step diagnostic guide to find the issue?",
       "options": [
         1,
         2,
@@ -399,7 +543,7 @@
     {
       "id": "I16",
       "dimension": "I",
-      "gamified_text": "You are on a hike and see a strange, complex pattern of mushroom growth on a tree. How likely are you to stop, take multiple photos, and then spend time that evening researching the specific fungus and the biological reasons for that pattern?",
+      "gamified_text": "Do you feel motivated by a math problem that has no practical reward other than finding the answer?",
       "options": [
         1,
         2,
@@ -411,7 +555,7 @@
     {
       "id": "I17",
       "dimension": "I",
-      "gamified_text": "You're in a science class. How much more do you enjoy the 'design an experiment' part than the 'write the conclusion' part?",
+      "gamified_text": "You're assigned research. Do you feel good about spending the afternoon gathering info in a library?",
       "options": [
         1,
         2,
@@ -423,7 +567,7 @@
     {
       "id": "I18",
       "dimension": "I",
-      "gamified_text": "When you learn a new complex idea (like how a car engine works or how the stock market functions), how satisfying is it to finally understand all the interconnected parts?",
+      "gamified_text": "When making a decision, is it important to base it entirely on logical analysis?",
       "options": [
         1,
         2,
@@ -435,7 +579,139 @@
     {
       "id": "I19",
       "dimension": "I",
-      "gamified_text": "You're playing a strategy game. How much of your fun comes from analyzing the game's mechanics and data to find the single most optimal strategy for winning?",
+      "gamified_text": "Your internet drops nightly. Are you interested in running tests for days to prove your theory why?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I20",
+      "dimension": "I",
+      "gamified_text": "You see a spreadsheet of sales data. Do you enjoy analyzing the numbers to understand performance?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I21",
+      "dimension": "I",
+      "gamified_text": "You have a medical study report. Are you interested in analyzing the 'Results' section for validity?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I22",
+      "dimension": "I",
+      "gamified_text": "When learning a skill, do you enjoy the part where you must use critical thinking to solve problems?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I23",
+      "dimension": "I",
+      "gamified_text": "Given a choice, do you feel more comfortable solving a logic puzzle than writing a story?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I24",
+      "dimension": "I",
+      "gamified_text": "Would you likely watch a documentary on gene-editing instead of a drama?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I25",
+      "dimension": "I",
+      "gamified_text": "You see a link for 'Daily Logic Puzzles.' Are you tempted to click and solve one?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I26",
+      "dimension": "I",
+      "gamified_text": "You see strange mushroom growth. Are you likely to research the biological reasons for it later?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I27",
+      "dimension": "I",
+      "gamified_text": "In science class, do you enjoy designing the experiment more than writing the conclusion?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I28",
+      "dimension": "I",
+      "gamified_text": "When learning a complex idea, is it satisfying to finally understand all the interconnected parts?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I29",
+      "dimension": "I",
+      "gamified_text": "In a strategy game, does your fun come from analyzing mechanics to find the optimal strategy?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "I30",
+      "dimension": "I",
+      "gamified_text": "A system is slow. Is it satisfying to design a more logical efficient system on paper?",
       "options": [
         1,
         2,
@@ -447,7 +723,7 @@
     {
       "id": "A1",
       "dimension": "A",
-      "gamified_text": "You’re given a blank canvas and paints. Do you feel excited to create a piece of art?",
+      "gamified_text": "You’re given a blank canvas and paints. Do you feel excited to create art?",
       "options": [
         1,
         2,
@@ -459,7 +735,7 @@
     {
       "id": "A2",
       "dimension": "A",
-      "gamified_text": "A music jam session begins. Do you enjoy joining in with singing.",
+      "gamified_text": "A music jam session begins. Do you enjoy joining in?",
       "options": [
         1,
         2,
@@ -471,7 +747,7 @@
     {
       "id": "A3",
       "dimension": "A",
-      "gamified_text": "Your guild needs a poster. Do you design it with colors and visuals?",
+      "gamified_text": "Your guild needs a poster. Do you enjoy designing the visuals?",
       "options": [
         1,
         2,
@@ -483,7 +759,7 @@
     {
       "id": "A4",
       "dimension": "A",
-      "gamified_text": "You’re tasked with writing a short play for a festival. Do you feel inspired writing a script for it?",
+      "gamified_text": "You’re tasked with writing a play. Do you feel inspired to write the script?",
       "options": [
         1,
         2,
@@ -495,7 +771,7 @@
     {
       "id": "A5",
       "dimension": "A",
-      "gamified_text": "A short film project needs actors and writers. Do you eagerly jump in?",
+      "gamified_text": "A film project needs actors. Do you eagerly jump in to perform?",
       "options": [
         1,
         2,
@@ -507,7 +783,7 @@
     {
       "id": "A6",
       "dimension": "A",
-      "gamified_text": "Someone gives you free time. Do you prefer experimenting with brand new ideas?",
+      "gamified_text": "You have free time. Do you prefer experimenting with new creative ideas?",
       "options": [
         1,
         2,
@@ -519,7 +795,7 @@
     {
       "id": "A7",
       "dimension": "A",
-      "gamified_text": "You're at a party, and someone starts a karaoke session. How excited are you to grab the microphone and perform your favorite song for the crowd?",
+      "gamified_text": "You see a guitar in an empty store. Do you have an urge to pick it up and play?",
       "options": [
         1,
         2,
@@ -531,7 +807,7 @@
     {
       "id": "A8",
       "dimension": "A",
-      "gamified_text": "You're asked to re-decorate a room. How much do you enjoy the task of choosing color palettes, fabrics, and furniture to create a specific mood or style?",
+      "gamified_text": "An art class says 'Create anything, no rules.' Does this freedom make you excited?",
       "options": [
         1,
         2,
@@ -543,7 +819,7 @@
     {
       "id": "A9",
       "dimension": "A",
-      "gamified_text": "How much do you enjoy spending an evening just listening to a new or complex music album, paying close attention to the layers of instruments, lyrics, and emotion?",
+      "gamified_text": "Someone starts karaoke. Are you excited to grab the mic and perform?",
       "options": [
         1,
         2,
@@ -555,7 +831,7 @@
     {
       "id": "A10",
       "dimension": "A",
-      "gamified_text": "You're in a drama club, and the director asks you to do an 'improv' scene. They give you a character and a location, and you have to invent the dialogue and action as you go. How energized do you feel in this spontaneous, unstructured situation?",
+      "gamified_text": "You're re-decorating. Do you enjoy choosing color palettes to create a mood?",
       "options": [
         1,
         2,
@@ -567,7 +843,7 @@
     {
       "id": "A11",
       "dimension": "A",
-      "gamified_text": "How important is it to you that your future work involves originality and self-expression, even if it's less stable than a traditional job?",
+      "gamified_text": "You see light hitting a wall perfectly. Do you stop to capture an artistic photo?",
       "options": [
         1,
         2,
@@ -579,7 +855,7 @@
     {
       "id": "A12",
       "dimension": "A",
-      "gamified_text": "You are on stage for a presentation. How much more do you enjoy the moments where you can be expressive and charismatic, versus the moments where you are just presenting data?",
+      "gamified_text": "You have a plain room. Do you enjoy planning a unique color scheme to make it original?",
       "options": [
         1,
         2,
@@ -591,7 +867,7 @@
     {
       "id": "A13",
       "dimension": "A",
-      "gamified_text": "When you think about your skills, how likely are you to say that your biggest strength is your imagination and ability to think of new ideas?",
+      "gamified_text": "Do you enjoy listening to an album specifically to analyze the layers of instruments?",
       "options": [
         1,
         2,
@@ -603,7 +879,7 @@
     {
       "id": "A14",
       "dimension": "A",
-      "gamified_text": "How much more do you prefer projects where the goal is 'be creative and original' over projects where the goal is 'be fast and accurate'?",
+      "gamified_text": "You have to do an improv scene. Do you feel energized by the lack of a script?",
       "options": [
         1,
         2,
@@ -615,7 +891,7 @@
     {
       "id": "A15",
       "dimension": "A",
-      "gamified_text": "You're in a group that's brainstorming ideas for a new event. How much do you enjoy being the person who throws out the most unconventional, 'out-of-the-box' ideas?",
+      "gamified_text": "Is it important that your future work involves self-expression?",
       "options": [
         1,
         2,
@@ -627,7 +903,7 @@
     {
       "id": "A16",
       "dimension": "A",
-      "gamified_text": "You're painting a picture. How likely are you to just 'go with the flow' and let the painting evolve on its own, rather than starting with a detailed plan and sketch?",
+      "gamified_text": "On stage, do you enjoy the moments where you can be expressive and charismatic?",
       "options": [
         1,
         2,
@@ -639,7 +915,7 @@
     {
       "id": "A17",
       "dimension": "A",
-      "gamified_text": "How much do you enjoy visiting art museums or galleries, just to see and interpret the creative work of others?",
+      "gamified_text": "Your guild needs a historian. Are you interested in writing the story of your battles?",
       "options": [
         1,
         2,
@@ -651,7 +927,7 @@
     {
       "id": "A18",
       "dimension": "A",
-      "gamified_text": "You're given two tasks: 1) Create an original character design for a new video game, or 2) Analyze the game's sales data. How much more motivating is the first task?",
+      "gamified_text": "Do you consider your imagination to be your biggest strength?",
       "options": [
         1,
         2,
@@ -663,7 +939,7 @@
     {
       "id": "A19",
       "dimension": "A",
-      "gamified_text": "When you have a strong emotion (like joy or sadness), how strong is your impulse to channel it into a creative outlet, like writing, drawing, or playing music?",
+      "gamified_text": "Do you prefer projects where the goal is to be creative and original?",
       "options": [
         1,
         2,
@@ -675,7 +951,7 @@
     {
       "id": "A20",
       "dimension": "A",
-      "gamified_text": "How much do you enjoy the challenge of 'composing' a perfect photograph, thinking about the lighting, angle, and framing?",
+      "gamified_text": "In a brainstorm, do you enjoy being the one who suggests unconventional ideas?",
       "options": [
         1,
         2,
@@ -687,7 +963,7 @@
     {
       "id": "A21",
       "dimension": "A",
-      "gamified_text": "When you're telling a story to friends, how much do you enjoy adding dramatic flair, using different voices, and gesturing to make it more entertaining?",
+      "gamified_text": "When painting, do you prefer to let the image evolve rather than following a plan?",
       "options": [
         1,
         2,
@@ -699,7 +975,7 @@
     {
       "id": "A22",
       "dimension": "A",
-      "gamified_text": "You're asked to help with a dance performance. How much more would you enjoy choreographing a new, original routine than just learning the existing steps?",
+      "gamified_text": "Do you spend extra time finding the perfect word to make an email sound expressive?",
       "options": [
         1,
         2,
@@ -711,7 +987,91 @@
     {
       "id": "A23",
       "dimension": "A",
-      "gamified_text": "You just watched a very abstract, symbolic movie that half your friends thought was 'weird.' How much do you enjoy the process of discussing it afterward, analyzing the themes, and forming your own unique interpretation of what it all meant?",
+      "gamified_text": "Do you enjoy visiting art galleries to interpret the work of others?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A24",
+      "dimension": "A",
+      "gamified_text": "Would you find creating an original character design motivating?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A25",
+      "dimension": "A",
+      "gamified_text": "Do you channel strong emotions into a creative outlet like drawing?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A26",
+      "dimension": "A",
+      "gamified_text": "Would you choose a lower-paying job if it offered complete creative freedom?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A27",
+      "dimension": "A",
+      "gamified_text": "Do you enjoy the challenge of composing a photograph's framing?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A28",
+      "dimension": "A",
+      "gamified_text": "Do you enjoy adding dramatic flair when telling a story?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A29",
+      "dimension": "A",
+      "gamified_text": "Would you enjoy choreographing a new dance routine?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "A30",
+      "dimension": "A",
+      "gamified_text": "Do you enjoy forming your own interpretation of a symbolic movie?",
       "options": [
         1,
         2,
@@ -723,7 +1083,7 @@
     {
       "id": "S1",
       "dimension": "S",
-      "gamified_text": "A junior student struggles with a subject you are good at. Do you patiently guide them?",
+      "gamified_text": "A junior student struggles with a subject. Do you patiently guide them?",
       "options": [
         1,
         2,
@@ -747,7 +1107,7 @@
     {
       "id": "S3",
       "dimension": "S",
-      "gamified_text": "A festival needs volunteers at the help desk. Do you step up for the task?",
+      "gamified_text": "A festival needs volunteers at the help desk. Do you step up?",
       "options": [
         1,
         2,
@@ -759,7 +1119,7 @@
     {
       "id": "S4",
       "dimension": "S",
-      "gamified_text": "You’re asked to lead a charity drive. Do you organize people and donations?",
+      "gamified_text": "You’re asked to lead a charity drive. Do you enjoy organizing the people?",
       "options": [
         1,
         2,
@@ -771,7 +1131,7 @@
     {
       "id": "S5",
       "dimension": "S",
-      "gamified_text": "A classmate feels left out. Do you include them in the group?",
+      "gamified_text": "A classmate feels left out. Do you act to include them in the group?",
       "options": [
         1,
         2,
@@ -783,7 +1143,7 @@
     {
       "id": "S6",
       "dimension": "S",
-      "gamified_text": "A sports team needs a coach. Do you feel excited to train and motivate them?",
+      "gamified_text": "A sports team needs a coach. Are you excited to motivate them?",
       "options": [
         1,
         2,
@@ -795,7 +1155,7 @@
     {
       "id": "S7",
       "dimension": "S",
-      "gamified_text": "When classmates argue, you calmly help them talk through their disagreement.",
+      "gamified_text": "When classmates argue, do you help them talk through their disagreement?",
       "options": [
         1,
         2,
@@ -807,7 +1167,7 @@
     {
       "id": "S8",
       "dimension": "S",
-      "gamified_text": "Your community plans a cleanup You feel eager to lead the team?",
+      "gamified_text": "Your community plans a cleanup. Are you eager to lead the team?",
       "options": [
         1,
         2,
@@ -819,7 +1179,7 @@
     {
       "id": "S9",
       "dimension": "S",
-      "gamified_text": "When an animal shelter seeks help, you volunteer to care for the animals.",
+      "gamified_text": "An animal shelter seeks help. Do you volunteer to care for the animals?",
       "options": [
         1,
         2,
@@ -831,7 +1191,7 @@
     {
       "id": "S10",
       "dimension": "S",
-      "gamified_text": "When you meet someone new, you make an effort to start a friendly conversation.",
+      "gamified_text": "When you meet someone new, do you make an effort to start a friendly conversation?",
       "options": [
         1,
         2,
@@ -843,7 +1203,7 @@
     {
       "id": "S11",
       "dimension": "S",
-      "gamified_text": "When you are in a new group, how important is it for you to make sure everyone is cooperating and feeling included?",
+      "gamified_text": "Does a large social gathering sound like a good way to recharge?",
       "options": [
         1,
         2,
@@ -855,7 +1215,7 @@
     {
       "id": "S12",
       "dimension": "S",
-      "gamified_text": "How much do you enjoy group projects where the *main* challenge is getting everyone to work together and communicate effectively?",
+      "gamified_text": "In a new group, is it important to you that everyone feels included?",
       "options": [
         1,
         2,
@@ -867,7 +1227,7 @@
     {
       "id": "S13",
       "dimension": "S",
-      "gamified_text": "A friend is going through a tough time and calls you, not for solutions, but just to 'vent' for 30 minutes. How comfortable are you in the role of being an active, empathetic listener?",
+      "gamified_text": "Friends are arguing. Do you naturally feel pulled to mediate?",
       "options": [
         1,
         2,
@@ -879,7 +1239,7 @@
     {
       "id": "S14",
       "dimension": "S",
-      "gamified_text": "How appealing is the idea of a career where your primary role is supporting a social cause or working directly for community improvement, such as in an NGO or non-profit?",
+      "gamified_text": "Does patiently teaching seniors how to use phones sound fulfilling?",
       "options": [
         1,
         2,
@@ -891,7 +1251,7 @@
     {
       "id": "S15",
       "dimension": "S",
-      "gamified_text": "You're put on a team with people from very different backgrounds and with very different personalities. How much do you enjoy the process of finding common ground and building a good team dynamic?",
+      "gamified_text": "Do you enjoy group projects where the challenge is communication?",
       "options": [
         1,
         2,
@@ -903,7 +1263,7 @@
     {
       "id": "S16",
       "dimension": "S",
-      "gamified_text": "Imagine you've successfully tutored a student, and they finally understand a concept they've been struggling with for weeks. How high is your feeling of personal fulfillment from this?",
+      "gamified_text": "Are you comfortable listening to a friend vent for 30 minutes?",
       "options": [
         1,
         2,
@@ -915,7 +1275,7 @@
     {
       "id": "S17",
       "dimension": "S",
-      "gamified_text": "You're at a party and see someone standing alone. How strong is your impulse to go over and strike up a conversation to make them feel included?",
+      "gamified_text": "Is a career working directly for community improvement appealing?",
       "options": [
         1,
         2,
@@ -927,7 +1287,7 @@
     {
       "id": "S18",
       "dimension": "S",
-      "gamified_text": "When you hear about a problem in your community, how likely are you to think, 'How can *we* get together to fix this?' versus 'How can *I* fix this?'",
+      "gamified_text": "Do you enjoy finding common ground in a diverse team?",
       "options": [
         1,
         2,
@@ -939,7 +1299,7 @@
     {
       "id": "S19",
       "dimension": "S",
-      "gamified_text": "How much do you enjoy being the 'host' of a group, whether it's for a study session or a small party, and making sure everyone has what they need?",
+      "gamified_text": "You tutored a student and they succeeded. Do you feel high personal fulfillment?",
       "options": [
         1,
         2,
@@ -951,7 +1311,7 @@
     {
       "id": "S20",
       "dimension": "S",
-      "gamified_text": "How satisfying do you find the process of explaining a complex idea to someone in simple terms they can understand?",
+      "gamified_text": "A shelter might close. Are you motivated to organize an event to save it?",
       "options": [
         1,
         2,
@@ -963,7 +1323,7 @@
     {
       "id": "S21",
       "dimension": "S",
-      "gamified_text": "You're in a club. How much more do you enjoy the 'social events' and 'community outreach' parts than the 'budgeting' and 'planning' parts?",
+      "gamified_text": "You see someone alone at a party. Do you go strike up a conversation?",
       "options": [
         1,
         2,
@@ -975,7 +1335,7 @@
     {
       "id": "S22",
       "dimension": "S",
-      "gamified_text": "How naturally do you find yourself paying attention to the 'emotional temperature' of a room—noticing who is happy, who is upset, and who is feeling left out?",
+      "gamified_text": "When solving a problem, do you prefer to get people together to fix it?",
       "options": [
         1,
         2,
@@ -987,7 +1347,7 @@
     {
       "id": "S23",
       "dimension": "S",
-      "gamified_text": "How much do you agree with the statement: 'The most rewarding part of any job is building positive relationships with my colleagues and clients.'",
+      "gamified_text": "Do you enjoy being the host who ensures everyone has what they need?",
       "options": [
         1,
         2,
@@ -999,7 +1359,79 @@
     {
       "id": "S24",
       "dimension": "S",
-      "gamified_text": "A new family moves into your neighborhood. How likely are you to be the person who bakes them cookies or stops by to introduce yourself and offer help?",
+      "gamified_text": "Is explaining a complex idea in simple terms satisfying to you?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S25",
+      "dimension": "S",
+      "gamified_text": "In a club, do you prefer the community outreach role?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S26",
+      "dimension": "S",
+      "gamified_text": "Do you naturally notice who is feeling left out in a room?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S27",
+      "dimension": "S",
+      "gamified_text": "Would you prefer a project where you help your entire team succeed?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S28",
+      "dimension": "S",
+      "gamified_text": "Is building positive relationships the most rewarding part of a job?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S29",
+      "dimension": "S",
+      "gamified_text": "Are you likely to introduce yourself to a new neighbor to offer help?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "S30",
+      "dimension": "S",
+      "gamified_text": "A new person joins your team. Do you feel pulled to include them?",
       "options": [
         1,
         2,
@@ -1023,7 +1455,7 @@
     {
       "id": "E2",
       "dimension": "E",
-      "gamified_text": "You have a business idea. Do you confidently pitch it to gain support?",
+      "gamified_text": "You have a business idea. Do you confidently pitch it to others?",
       "options": [
         1,
         2,
@@ -1059,7 +1491,7 @@
     {
       "id": "E5",
       "dimension": "E",
-      "gamified_text": "If given the chance, do you take risks to launch a new project?",
+      "gamified_text": "Do you take risks to launch a new project?",
       "options": [
         1,
         2,
@@ -1071,7 +1503,7 @@
     {
       "id": "E6",
       "dimension": "E",
-      "gamified_text": "You’re in a competition. Do you enjoy the fast-paced, competitive energy?",
+      "gamified_text": "You’re in a competition. Do you enjoy the competitive energy?",
       "options": [
         1,
         2,
@@ -1083,7 +1515,7 @@
     {
       "id": "E7",
       "dimension": "E",
-      "gamified_text": "When you host a podcast, you enjoy asking questions and leading discussions.",
+      "gamified_text": "Hosting a podcast, do you enjoy leading the discussion?",
       "options": [
         1,
         2,
@@ -1095,7 +1527,7 @@
     {
       "id": "E8",
       "dimension": "E",
-      "gamified_text": "When you see a new product idea, you create a short ad to promote it.",
+      "gamified_text": "You see a product idea. Do you create an ad to promote it?",
       "options": [
         1,
         2,
@@ -1107,7 +1539,7 @@
     {
       "id": "E9",
       "dimension": "E",
-      "gamified_text": "When you organize a fundraiser, you inspire others to contribute generously.",
+      "gamified_text": "Organizing a fundraiser, do you enjoy inspiring others to give?",
       "options": [
         1,
         2,
@@ -1119,7 +1551,7 @@
     {
       "id": "E10",
       "dimension": "E",
-      "gamified_text": "When you manage a group project, you enjoy making the final decisions.",
+      "gamified_text": "Managing a project, do you enjoy making the final decisions?",
       "options": [
         1,
         2,
@@ -1131,7 +1563,7 @@
     {
       "id": "E11",
       "dimension": "E",
-      "gamified_text": "In your group project, one person has to give the 10-minute final presentation to the entire class. How willing are you to volunteer for that public-speaking role?",
+      "gamified_text": "One person must give the final presentation. Are you willing to volunteer?",
       "options": [
         1,
         2,
@@ -1143,7 +1575,7 @@
     {
       "id": "E12",
       "dimension": "E",
-      "gamified_text": "You are at a local market. How much do you enjoy the process of haggling with a vendor to get a better price on an item?",
+      "gamified_text": "Do you enjoy the process of haggling for a better price?",
       "options": [
         1,
         2,
@@ -1155,7 +1587,7 @@
     {
       "id": "E13",
       "dimension": "E",
-      "gamified_text": "You're in a group that can't decide which movie to see. How strong is your impulse to take charge, pick a movie, and convince everyone else it's the right choice?",
+      "gamified_text": "Your group is undecided. Do you feel an urge to pick a movie and convince everyone?",
       "options": [
         1,
         2,
@@ -1167,7 +1599,7 @@
     {
       "id": "E14",
       "dimension": "E",
-      "gamified_text": "You have an idea for a startup business. How motivated are you by the *process* of building the business (pitching, marketing, selling) versus just the *idea* itself?",
+      "gamified_text": "Are you motivated by the process of selling a business idea?",
       "options": [
         1,
         2,
@@ -1179,7 +1611,7 @@
     {
       "id": "E15",
       "dimension": "E",
-      "gamified_text": "When you're trying to make a point, how comfortable are you with being assertive and even a little 'pushy' to make sure your voice is heard?",
+      "gamified_text": "Are you comfortable being assertive to ensure your voice is heard?",
       "options": [
         1,
         2,
@@ -1191,7 +1623,7 @@
     {
       "id": "E16",
       "dimension": "E",
-      "gamified_text": "Imagine you lead a team to a big victory. How much of your satisfaction comes from the fact that *you* were the one in charge and your plan worked?",
+      "gamified_text": "Does a high-stakes tournament sound more exciting than a cooperative game?",
       "options": [
         1,
         2,
@@ -1203,7 +1635,7 @@
     {
       "id": "E17",
       "dimension": "E",
-      "gamified_text": "You have an opportunity to invest $100 of your own money in a friend's business idea. It could fail, or it could make you $500. How appealing is this kind of financial risk to you?",
+      "gamified_text": "Is it satisfying when a team victory happens because your plan worked?",
       "options": [
         1,
         2,
@@ -1215,7 +1647,7 @@
     {
       "id": "E18",
       "dimension": "E",
-      "gamified_text": "Your team is feeling unmotivated about a project. How much do you enjoy giving a short 'pep talk' to get everyone excited and focused on the goal again?",
+      "gamified_text": "Selling an item online, do you enjoy negotiating to get a higher price?",
       "options": [
         1,
         2,
@@ -1227,7 +1659,7 @@
     {
       "id": "E19",
       "dimension": "E",
-      "gamified_text": "How much do you enjoy the idea of a job where your success is measured by clear numbers, like 'sales targets met' or 'revenue generated'?",
+      "gamified_text": "Investing money with a risk of loss but chance of high gain: is this appealing?",
       "options": [
         1,
         2,
@@ -1239,7 +1671,7 @@
     {
       "id": "E20",
       "dimension": "E",
-      "gamified_text": "How much more do you enjoy a group role where you are the 'team captain' or 'spokesperson' versus a role where you are the 'researcher' or 'technical expert'?",
+      "gamified_text": "Do you enjoy giving a 'pep talk' to motivate a team?",
       "options": [
         1,
         2,
@@ -1251,7 +1683,7 @@
     {
       "id": "E21",
       "dimension": "E",
-      "gamified_text": "When you see a process that is inefficient, how strong is your urge to step in, take control, and make it better (even if it's 'not your job')?",
+      "gamified_text": "Do you enjoy jobs where success is measured by revenue numbers?",
       "options": [
         1,
         2,
@@ -1263,7 +1695,7 @@
     {
       "id": "E22",
       "dimension": "E",
-      "gamified_text": "How much do you enjoy the challenge of 'selling' an idea to someone—convincing them to see the world your way?",
+      "gamified_text": "Do you feel confident promoting yourself to strangers at an event?",
       "options": [
         1,
         2,
@@ -1275,7 +1707,7 @@
     {
       "id": "E23",
       "dimension": "E",
-      "gamified_text": "How comfortable are you with the idea that in a leadership role, you often have to make difficult decisions that may be unpopular?",
+      "gamified_text": "Do you enjoy being the team spokesperson?",
       "options": [
         1,
         2,
@@ -1287,7 +1719,79 @@
     {
       "id": "E24",
       "dimension": "E",
-      "gamified_text": "How interested are you in learning about topics like investing, stock market trends, or how to start a business?",
+      "gamified_text": "You need funding. Do you relish the challenge of pitching to a panel?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E25",
+      "dimension": "E",
+      "gamified_text": "Seeing an inefficient process, do you have an urge to take control and fix it?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E26",
+      "dimension": "E",
+      "gamified_text": "Do you enjoy the challenge of convincing someone to see your way?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E27",
+      "dimension": "E",
+      "gamified_text": "Are you comfortable making unpopular decisions as a leader?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E28",
+      "dimension": "E",
+      "gamified_text": "Do you enjoy a competitive debate against another team?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E29",
+      "dimension": "E",
+      "gamified_text": "Are you interested in learning how to start a business?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "E30",
+      "dimension": "E",
+      "gamified_text": "In a city-building game, do you enjoy managing the budget for profit?",
       "options": [
         1,
         2,
@@ -1335,7 +1839,7 @@
     {
       "id": "C4",
       "dimension": "C",
-      "gamified_text": "You must document meeting minutes. Do you enjoy step-by-step recording?",
+      "gamified_text": "You must document minutes. Do you enjoy step-by-step recording?",
       "options": [
         1,
         2,
@@ -1347,7 +1851,7 @@
     {
       "id": "C5",
       "dimension": "C",
-      "gamified_text": "You’re asked to create an exam timetable. Do you enjoy making a systematic schedule?",
+      "gamified_text": "You’re asked to create a timetable. Do you enjoy making a systematic schedule?",
       "options": [
         1,
         2,
@@ -1371,7 +1875,7 @@
     {
       "id": "C7",
       "dimension": "C",
-      "gamified_text": "How much do you enjoy the process of organizing a large collection of digital files (music, photos, documents) into perfectly labeled folders and subfolders?",
+      "gamified_text": "Would you prefer a job with a fixed schedule and clear routine tasks?",
       "options": [
         1,
         2,
@@ -1383,7 +1887,7 @@
     {
       "id": "C8",
       "dimension": "C",
-      "gamified_text": "When you're working on a project, how important is it for you to have a clear, step-by-step plan before you even begin?",
+      "gamified_text": "Does the task of comparing spreadsheets to find typos sound satisfying?",
       "options": [
         1,
         2,
@@ -1395,7 +1899,7 @@
     {
       "id": "C9",
       "dimension": "C",
-      "gamified_text": "You are given a 100-page document. How motivated are you to be the person who proofreads it to find every single spelling mistake and grammar error?",
+      "gamified_text": "Do you feel comfortable having a very specific set of rules to follow?",
       "options": [
         1,
         2,
@@ -1407,7 +1911,7 @@
     {
       "id": "C10",
       "dimension": "C",
-      "gamified_text": "You're in a library. How satisfying do you find the quiet, orderly atmosphere where every book has a specific place according to a clear system?",
+      "gamified_text": "Do you enjoy organizing digital files into perfectly labeled folders?",
       "options": [
         1,
         2,
@@ -1419,7 +1923,7 @@
     {
       "id": "C11",
       "dimension": "C",
-      "gamified_text": "You have a large project. How satisfying is it to create a detailed 'to-do list' and check off each small, specific task as you complete it?",
+      "gamified_text": "Is the task of building a color-coded schedule spreadsheet appealing?",
       "options": [
         1,
         2,
@@ -1431,7 +1935,7 @@
     {
       "id": "C12",
       "dimension": "C",
-      "gamified_text": "How much do you prefer tasks where the rules are clear and the 'right answer' is obvious, over tasks where the instructions are vague and 'creative'?",
+      "gamified_text": "Is it important to have a clear plan before you begin a project?",
       "options": [
         1,
         2,
@@ -1443,7 +1947,7 @@
     {
       "id": "C13",
       "dimension": "C",
-      "gamified_text": "You are given a long list of customer names and addresses to enter into a database. How focused are you on the task of ensuring every single entry is 100% accurate, with no typos?",
+      "gamified_text": "Are you motivated to proofread a document for every single error?",
       "options": [
         1,
         2,
@@ -1455,7 +1959,7 @@
     {
       "id": "C14",
       "dimension": "C",
-      "gamified_text": "You're volunteering for an event. How much would you enjoy the job of sitting at the registration desk, checking people's names off a list, and handing them their official name badge?",
+      "gamified_text": "Do you find a library's orderly atmosphere satisfying?",
       "options": [
         1,
         2,
@@ -1467,7 +1971,7 @@
     {
       "id": "C15",
       "dimension": "C",
-      "gamified_text": "You're working on a team. How much do you enjoy being the person responsible for 'quality control'—checking everyone's work to make sure it meets the standard?",
+      "gamified_text": "Is checking off tasks on a detailed to-do list satisfying?",
       "options": [
         1,
         2,
@@ -1479,7 +1983,7 @@
     {
       "id": "C16",
       "dimension": "C",
-      "gamified_text": "How appealing is the idea of a job where you get to manage a complex inventory system, keeping track of exactly what comes in and what goes out every day?",
+      "gamified_text": "Do you prefer tasks where the rules and answers are clear?",
       "options": [
         1,
         2,
@@ -1491,7 +1995,7 @@
     {
       "id": "C17",
       "dimension": "C",
-      "gamified_text": "You're watching a movie, and you notice a tiny continuity error (like a cup suddenly moving to a different spot). How satisfying is it to be the person who spots that small detail?",
+      "gamified_text": "Do you enjoy formatting a report to match guidelines perfectly?",
       "options": [
         1,
         2,
@@ -1503,7 +2007,7 @@
     {
       "id": "C18",
       "dimension": "C",
-      "gamified_text": "How much do you enjoy tasks that are predictable and routine? For example, a data-entry job that you do for two hours every day.",
+      "gamified_text": "Are you focused when ensuring database entries are 100% accurate?",
       "options": [
         1,
         2,
@@ -1515,7 +2019,7 @@
     {
       "id": "C19",
       "dimension": "C",
-      "gamified_text": "How comfortable do you feel with the idea of a standard 'office job,' which might involve tasks like answering emails, filing reports, and managing schedules?",
+      "gamified_text": "Would you enjoy checking names off a registration list?",
       "options": [
         1,
         2,
@@ -1527,7 +2031,127 @@
     {
       "id": "C20",
       "dimension": "C",
-      "gamified_text": "You are given a large stack of dis-organized papers. How strong is your urge to stop what you are doing and file them all into labeled folders?",
+      "gamified_text": "Do you enjoy a game more if it has a detailed rulebook?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C21",
+      "dimension": "C",
+      "gamified_text": "Do you enjoy the role of checking others' work for quality?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C22",
+      "dimension": "C",
+      "gamified_text": "Is the idea of managing a complex inventory system appealing?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C23",
+      "dimension": "C",
+      "gamified_text": "Is it satisfying to spot a tiny continuity error in a movie?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C24",
+      "dimension": "C",
+      "gamified_text": "Do you enjoy creating a detailed itinerary for a trip?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C25",
+      "dimension": "C",
+      "gamified_text": "Do you enjoy predictable, routine tasks?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C26",
+      "dimension": "C",
+      "gamified_text": "Do you feel comfortable with standard office tasks like filing?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C27",
+      "dimension": "C",
+      "gamified_text": "Are you likely to follow a recipe's exact timing perfectly?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C28",
+      "dimension": "C",
+      "gamified_text": "Do you enjoy ensuring receipts match budget rules?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C29",
+      "dimension": "C",
+      "gamified_text": "Do you have an urge to file disorganized papers?",
+      "options": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "C30",
+      "dimension": "C",
+      "gamified_text": "Does the task of calculating pay based on hours sound satisfying?",
       "options": [
         1,
         2,
