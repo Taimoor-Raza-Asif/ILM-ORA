@@ -43,12 +43,6 @@ const UniversitySchema = new mongoose.Schema({
     // Campus Info
     campus: String, // Urban/Rural etc
     area: String,
-    coordinates: {
-        lat: Number,
-        lng: Number,
-        source: { type: String, default: 'manual' },
-        lastUpdated: Date
-    },
 
     // Embedded Programs
     programs: [ProgramSchema],

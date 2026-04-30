@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ILM-ORA Load Test Report — Apr 17, 2026</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 40px 48px;
+    max-width: 1050px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── Typography ── */
+  h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+  h2 { font-size: 17px; font-weight: 600; color: #0f172a; margin: 32px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+  h3 { font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 8px; }
+  p  { color: #475569; margin-bottom: 8px; font-size: 13px; }
+  .subtitle { color: #64748b; font-size: 13px; margin-bottom: 0; }
+
+  /* ── KPI Strip ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+  .kpi {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .kpi-value { font-size: 26px; font-weight: 700; color: #0f172a; line-height: 1.2; }
+  .kpi-value.green  { color: #16a34a; }
+  .kpi-value.orange { color: #d97706; }
+  .kpi-value.red    { color: #dc2626; }
+  .kpi-label { font-size: 11px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 8px; }
+  th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  td { padding: 7px 10px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.center { text-align: center; }
+
+  /* Row tones */
+  .row-pass td { background: #f0fdf4 !important; }
+  .row-warn td { background: #fffbeb !important; }
+  .row-fail td { background: #fef2f2 !important; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+  .badge-pass    { background: #dcfce7; color: #166534; }
+  .badge-warn    { background: #fef9c3; color: #854d0e; }
+  .badge-fail    { background: #fee2e2; color: #991b1b; }
+  .badge-success { background: #dcfce7; color: #166534; }
+  .badge-danger  { background: #fee2e2; color: #991b1b; }
+  .badge-warning { background: #fef9c3; color: #854d0e; }
+  .badge-info    { background: #dbeafe; color: #1e40af; }
+
+  /* ── Charts ── */
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 12px 0; }
+  .chart-wrap { padding: 0; }
+  .bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; }
+  .bar-label { font-size: 11.5px; color: #475569; min-width: 90px; }
+  .bar-track { flex: 1; background: #f1f5f9; border-radius: 4px; height: 20px; overflow: hidden; }
+  .bar-fill  { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-val   { font-size: 11.5px; color: #334155; min-width: 72px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  .bar-blue   { background: #3b82f6; }
+  .bar-green  { background: #22c55e; }
+  .bar-amber  { background: #f59e0b; }
+  .bar-red    { background: #ef4444; }
+  .bar-violet { background: #8b5cf6; }
+
+  /* ── Finding Cards ── */
+  .findings { display: flex; flex-direction: column; gap: 12px; margin: 8px 0; }
+  .finding {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .finding-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 14px;
+    background: #f8fafc;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .finding-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .finding-row  { display: flex; gap: 10px; }
+  .finding-key  { font-size: 11.5px; font-weight: 600; color: #64748b; min-width: 100px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .finding-val  { font-size: 12.5px; color: #1e293b; }
+
+  /* ── Check Matrix ── */
+  .check-pass  { color: #16a34a; font-weight: 600; }
+  .check-skip  { color: #94a3b8; }
+
+  /* ── Divider ── */
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 28px 0; }
+
+  /* ── Legend ── */
+  .legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: #64748b; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Footer ── */
+  .footer { color: #94a3b8; font-size: 11px; margin-top: 40px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
+
+  /* ── Print ── */
+  @media print {
+    body { padding: 20px 28px; font-size: 12px; }
+    h1   { font-size: 22px; }
+    h2   { font-size: 15px; page-break-after: avoid; }
+    .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+    .charts-grid { grid-template-columns: 1fr 1fr; }
+    .finding { page-break-inside: avoid; }
+    table  { page-break-inside: auto; }
+    tr     { page-break-inside: avoid; }
+    .no-break { page-break-inside: avoid; }
+    @page  { margin: 18mm 16mm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ Cover ═══════════════════════════════════════════════════════════════ -->
+<h1>ILM-ORA Load Test Report</h1>
+<p class="subtitle">k6 &nbsp;·&nbsp; Smoke &nbsp;·&nbsp; Average Load &nbsp;·&nbsp; Spike &nbsp;·&nbsp; Endurance &nbsp;·&nbsp; <strong>17 April 2026</strong></p>
+<p class="subtitle" style="margin-top:3px;">Gateway: <code>http://localhost:3000</code> &nbsp;·&nbsp; Tool: k6 v1.7.1 &nbsp;·&nbsp; OS: Windows 10</p>
+
+<!-- ══ KPIs ════════════════════════════════════════════════════════════════ -->
+<h2>At a Glance</h2>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-value">83,246</div><div class="kpi-label">Total HTTP Requests</div></div>
+  <div class="kpi"><div class="kpi-value green">99.97%</div><div class="kpi-label">Best Check Pass Rate</div></div>
+  <div class="kpi"><div class="kpi-value green">2.01 s</div><div class="kpi-label">DeBERTa ML p95</div></div>
+  <div class="kpi"><div class="kpi-value green">No Leak</div><div class="kpi-label">Memory Stability</div></div>
+</div>
+
+<!-- ══ Scenario Table ══════════════════════════════════════════════════════ -->
+<h2>Scenario Overview</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Scenario</th><th>VUs</th><th>Duration</th><th class="num">Requests</th>
+      <th class="num">RPS</th><th class="num">Checks</th><th class="num">Error Rate</th>
+      <th class="num">p50</th><th class="num">p95</th><th class="num">p99</th><th class="center">Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-pass">
+      <td><strong>Smoke</strong></td><td>1</td><td>30 s</td><td class="num">80</td>
+      <td class="num">2.7</td><td class="num">100.00%</td><td class="num">0.00%</td>
+      <td class="num">273 ms</td><td class="num">821 ms</td><td class="num">—</td>
+      <td class="center"><span class="badge badge-pass">PASSED</span></td>
+    </tr>
+    <tr class="row-warn">
+      <td><strong>Avg Load</strong></td><td>50</td><td>20 min</td><td class="num">26,743</td>
+      <td class="num">22.3</td><td class="num">99.97%</td><td class="num">6.67%</td>
+      <td class="num">763 ms</td><td class="num">8,380 ms</td><td class="num">11,250 ms</td>
+      <td class="center"><span class="badge badge-warn">PARTIAL</span></td>
+    </tr>
+    <tr class="row-warn">
+      <td><strong>Spike</strong></td><td>5→200→5</td><td>6 min</td><td class="num">7,139</td>
+      <td class="num">19.6</td><td class="num">87.28%</td><td class="num">14.24%</td>
+      <td class="num">2,080 ms</td><td class="num">30,560 ms</td><td class="num">—</td>
+      <td class="center"><span class="badge badge-warn">PARTIAL</span></td>
+    </tr>
+    <tr class="row-warn">
+      <td><strong>Endurance</strong></td><td>30</td><td>30 min</td><td class="num">39,284</td>
+      <td class="num">21.8</td><td class="num">99.99%</td><td class="num">6.66%</td>
+      <td class="num">590 ms</td><td class="num">4,360 ms</td><td class="num">6,530 ms</td>
+      <td class="center"><span class="badge badge-warn">PARTIAL</span></td>
+    </tr>
+  </tbody>
+</table>
+<p><em>PARTIAL = application checks pass but one or more SLO thresholds (latency / error rate) were breached.</em></p>
+
+<!-- ══ Latency Charts ══════════════════════════════════════════════════════ -->
+<h2>Latency Analysis</h2>
+<div class="charts-grid">
+
+  <div class="chart-wrap no-break">
+    <h3>p50 Median Latency</h3>
+    <div class="legend"><div class="legend-item"><div class="legend-dot bar-blue"></div>Median response time (ms)</div></div>
+    <div class="bar-chart">
+      <!-- max ≈ 2080 -->
+      <div class="bar-row"><span class="bar-label">Smoke</span><div class="bar-track"><div class="bar-fill bar-green" style="width:13%"></div></div><span class="bar-val">273 ms</span></div>
+      <div class="bar-row"><span class="bar-label">Avg Load</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:37%"></div></div><span class="bar-val">763 ms</span></div>
+      <div class="bar-row"><span class="bar-label">Spike</span><div class="bar-track"><div class="bar-fill bar-red" style="width:100%"></div></div><span class="bar-val">2,080 ms</span></div>
+      <div class="bar-row"><span class="bar-label">Endurance</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:28%"></div></div><span class="bar-val">590 ms</span></div>
+    </div>
+  </div>
+
+  <div class="chart-wrap no-break">
+    <h3>p95 Latency vs. 2,500 ms SLO</h3>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot bar-blue"></div>p95 latency (ms)</div>
+      <div class="legend-item" style="color:#dc2626; font-weight:600;">SLO = 2,500 ms</div>
+    </div>
+    <div class="bar-chart">
+      <!-- max ≈ 30560 -->
+      <div class="bar-row"><span class="bar-label">Smoke</span><div class="bar-track"><div class="bar-fill bar-green" style="width:3%"></div></div><span class="bar-val">821 ms ✓</span></div>
+      <div class="bar-row"><span class="bar-label">Avg Load</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:27%"></div></div><span class="bar-val">8,380 ms ✗</span></div>
+      <div class="bar-row"><span class="bar-label">Spike</span><div class="bar-track"><div class="bar-fill bar-red" style="width:100%"></div></div><span class="bar-val">30,560 ms ✗</span></div>
+      <div class="bar-row"><span class="bar-label">Endurance</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:14%"></div></div><span class="bar-val">4,360 ms ✗</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ Throughput & Errors ═════════════════════════════════════════════════ -->
+<h2>Throughput &amp; Error Rate</h2>
+<div class="charts-grid">
+
+  <div class="chart-wrap no-break">
+    <h3>Requests per Second</h3>
+    <div class="bar-chart">
+      <!-- max ≈ 22.3 -->
+      <div class="bar-row"><span class="bar-label">Smoke</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:12%"></div></div><span class="bar-val">2.7 rps</span></div>
+      <div class="bar-row"><span class="bar-label">Avg Load</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:100%"></div></div><span class="bar-val">22.3 rps</span></div>
+      <div class="bar-row"><span class="bar-label">Spike</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:88%"></div></div><span class="bar-val">19.6 rps</span></div>
+      <div class="bar-row"><span class="bar-label">Endurance</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:98%"></div></div><span class="bar-val">21.8 rps</span></div>
+    </div>
+  </div>
+
+  <div class="chart-wrap no-break">
+    <h3>Error Rate (%) vs. 5% SLO</h3>
+    <div class="bar-chart">
+      <!-- max ≈ 14.24 -->
+      <div class="bar-row"><span class="bar-label">Smoke</span><div class="bar-track"><div class="bar-fill bar-green" style="width:1%"></div></div><span class="bar-val">0.00% ✓</span></div>
+      <div class="bar-row"><span class="bar-label">Avg Load</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:47%"></div></div><span class="bar-val">6.67% ✗</span></div>
+      <div class="bar-row"><span class="bar-label">Spike</span><div class="bar-track"><div class="bar-fill bar-red" style="width:100%"></div></div><span class="bar-val">14.24% ✗</span></div>
+      <div class="bar-row"><span class="bar-label">Endurance</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:47%"></div></div><span class="bar-val">6.66% ✗</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ ML Latency ══════════════════════════════════════════════════════════ -->
+<h2>DeBERTa ML Inference Latency</h2>
+<p>Endpoint: <code>GET /api/reviews/:uni/stats</code> — triggers the Python sentiment pipeline on the university-service. SLO: <strong>30 seconds</strong>.</p>
+
+<div class="kpi-grid" style="margin-top:12px;">
+  <div class="kpi"><div class="kpi-value green">977 ms</div><div class="kpi-label">Avg Load — avg</div></div>
+  <div class="kpi"><div class="kpi-value green">2.02 s</div><div class="kpi-label">Avg Load — p95</div></div>
+  <div class="kpi"><div class="kpi-value green">917 ms</div><div class="kpi-label">Endurance — avg</div></div>
+  <div class="kpi"><div class="kpi-value green">2.01 s</div><div class="kpi-label">Endurance — p95</div></div>
+</div>
+
+<div class="chart-wrap no-break" style="margin-top:16px; max-width:500px;">
+  <h3>ML p95 vs. SLO (ms) — log-scale equivalent bar</h3>
+  <div class="bar-chart">
+    <!-- max = 30000 -->
+    <div class="bar-row"><span class="bar-label">Avg Load p95</span><div class="bar-track"><div class="bar-fill bar-green" style="width:7%"></div></div><span class="bar-val">2,020 ms</span></div>
+    <div class="bar-row"><span class="bar-label">Endurance p95</span><div class="bar-track"><div class="bar-fill bar-green" style="width:7%"></div></div><span class="bar-val">2,010 ms</span></div>
+    <div class="bar-row"><span class="bar-label">SLO Limit</span><div class="bar-track"><div class="bar-fill bar-red" style="width:100%; opacity:0.35;"></div></div><span class="bar-val">30,000 ms</span></div>
+  </div>
+</div>
+<p style="margin-top:8px;"><strong>Conclusion:</strong> DeBERTa inference is well within SLO across both sustained scenarios (93% headroom).</p>
+
+<!-- ══ Endpoint Health Matrix ══════════════════════════════════════════════ -->
+<h2>Endpoint Health Matrix</h2>
+<p>Pass = check passed. — = skipped for this scenario (ML / spike opted out).</p>
+<table style="margin-top:8px;">
+  <thead>
+    <tr>
+      <th>Endpoint</th>
+      <th class="center">Smoke</th>
+      <th class="center">Avg Load</th>
+      <th class="center">Spike</th>
+      <th class="center">Endurance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>GET /health</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api (info)</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/universities</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/universities/:id</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/universities/:id/programs</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/universities/:id/scholarships</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-skip">—</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/careers</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/careers/search</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/careers/stats</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/reviews/:university</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-skip">—</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>GET /api/reviews/:university/stats (ML)</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-skip">—</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>POST /api/auth/register</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-skip">—</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>POST /api/auth/login</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-skip">—</td><td class="center check-pass">Pass</td></tr>
+    <tr><td>POST /api/recommend/degrees</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td><td class="center check-pass">Pass</td></tr>
+  </tbody>
+</table>
+
+<!-- ══ Findings ════════════════════════════════════════════════════════════ -->
+<h2>Findings &amp; Recommendations</h2>
+
+<div class="findings">
+
+  <div class="finding">
+    <div class="finding-header">
+      High p95 latency at 30–50 VUs
+      <span class="badge badge-danger">Critical</span>
+    </div>
+    <div class="finding-body">
+      <div class="finding-row">
+        <span class="finding-key">Root Cause</span>
+        <span class="finding-val">MongoDB query queuing and bcrypt CPU saturation under concurrent load. Node.js event loop is blocked during password hashing.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Observed</span>
+        <span class="finding-val">Avg Load p95 = 8,380 ms (SLO: 2,500 ms). Endurance p95 = 4,360 ms.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Recommendation</span>
+        <span class="finding-val">Add MongoDB compound indexes on hot query fields. Reduce bcrypt work factor to 10 or offload hashing to a worker thread pool. Consider adding connection pooling limits.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      Register success drops to 23% at 200 VUs (Spike)
+      <span class="badge badge-danger">Critical</span>
+    </div>
+    <div class="finding-body">
+      <div class="finding-row">
+        <span class="finding-key">Root Cause</span>
+        <span class="finding-val">bcrypt.hash() is synchronous and blocks the Node.js event loop. At 200 VUs the auth service request queue grows faster than it drains, causing timeouts.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Observed</span>
+        <span class="finding-val">430/559 register checks failed. p95 latency = 30,560 ms during peak VU period.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Recommendation</span>
+        <span class="finding-val">Use Node.js worker_threads for bcrypt operations, or replace with Argon2 (async, lower CPU cost at safe settings). Add a request queue with back-pressure and a 429 rate-limit response.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      6.7% error rate at 30–50 VUs
+      <span class="badge badge-warning">Warning</span>
+    </div>
+    <div class="finding-body">
+      <div class="finding-row">
+        <span class="finding-key">Root Cause</span>
+        <span class="finding-val">Concurrent VUs registering unique emails within short iteration windows occasionally collide on MongoDB unique index, returning 400 "User already exists".</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Observed</span>
+        <span class="finding-val">~1,785 failed requests over 20-min avg-load run. All failures were 400/409, not 5xx.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Recommendation</span>
+        <span class="finding-val">This is a test-script artifact (fast iteration). In production, add proper 409 Conflict responses and client-side retry logic. Email uniqueness constraint is correct behavior.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-header">
+      No memory leak detected (Endurance — 30 min)
+      <span class="badge badge-success">Good</span>
+    </div>
+    <div class="finding-body">
+      <div class="finding-row">
+        <span class="finding-key">Finding</span>
+        <span class="finding-val">p95 latency remained flat throughout the 25-minute steady phase (590 ms p50, 4,360 ms p95). No linear growth in response times over time.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Checked</span>
+        <span class="finding-val">All Node.js microservices (8) and the Python DeBERTa service. No process RSS growth observed. MongoDB connection pool stable.</span>
+      </div>
+      <div class="finding-row">
+        <span class="finding-key">Recommendation</span>
+        <span class="finding-val">No action required. Run a 4-hour soak test before production deployment to confirm at longer timescales.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ Test Configuration ═════════════════════════════════════════════════ -->
+<h2>Test Configuration</h2>
+<table>
+  <thead><tr><th>Parameter</th><th>Smoke</th><th>Avg Load</th><th>Spike</th><th>Endurance</th></tr></thead>
+  <tbody>
+    <tr><td>Tool</td><td colspan="4">k6 v1.7.1 (Grafana)</td></tr>
+    <tr><td>Base URL</td><td colspan="4">http://localhost:3000 (API Gateway)</td></tr>
+    <tr><td>Max VUs</td><td class="num">1</td><td class="num">50</td><td class="num">200</td><td class="num">30</td></tr>
+    <tr><td>Duration</td><td>30 s</td><td>20 min</td><td>6 min</td><td>30 min</td></tr>
+    <tr><td>Ramp-up</td><td>None</td><td>2 min (0→50)</td><td>1 min warm + 10s spike</td><td>3 min (0→30)</td></tr>
+    <tr><td>ML Endpoints</td><td>Yes</td><td>Yes</td><td>No (skipped)</td><td>Yes</td></tr>
+    <tr><td>p95 Latency SLO</td><td>3,000 ms</td><td>2,500 ms</td><td>8,000 ms</td><td>3,000 ms</td></tr>
+    <tr><td>Error Rate SLO</td><td>5%</td><td>5%</td><td>20%</td><td>5%</td></tr>
+    <tr><td>Checks SLO</td><td>90%</td><td>95%</td><td>80%</td><td>95%</td></tr>
+  </tbody>
+</table>
+
+<!-- ══ Footer ════════════════════════════════════════════════════════════ -->
+<div class="footer">
+  <p>ILM-ORA · Load Test Report · Generated 17 April 2026 · k6 v1.7.1 · Reports: <code>load-tests/reports/</code></p>
+  <p>Architecture: React (Vite, port 3001) → API Gateway (port 3000) → Auth (3008) · Quiz (3002) · Recommendation (3003) · Sentiment stub (3004) · University + DeBERTa ML (3005 + 5000) · Career (3006) · Admin (3007) · MongoDB Atlas</p>
+</div>
+
+</body>
+</html>

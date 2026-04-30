@@ -2,88 +2,6 @@
 import Review from '../models/Review.js';
 import { University } from '../models/University.js';
 import { predictSingle, predictBatch } from '../services/sentimentService.js'; // Fixed: import predictBatch
-import { getHostelPolicy, isInternalHostelUnavailable } from '../config/hostelAvailability.js';
-
-const FACTOR_TO_BREAKDOWN_KEY = {
-    Cafeteria: 'Cafeteria',
-    Campus: 'Campus',
-    'Campus Life': 'Campus',
-    Faculty: 'Faculty',
-    Hostels: 'Hostels',
-    Housing: 'Hostels',
-    Labs: 'Labs',
-    Management: 'Management',
-    Resources: 'Resources',
-    Sports: 'Sports',
-    Events: 'Events',
-    'Job Support': 'JobSupport',
-    JobSupport: 'JobSupport',
-    Placements: 'JobSupport'
-};
-
-const normalizeBreakdownKey = (rawKey) => {
-    const key = String(rawKey || '').replace(/\s+/g, '').trim();
-    if (!key) return null;
-    if (key.toLowerCase() === 'overall') return 'Overall';
-    const aliases = {
-        jobsupport: 'JobSupport',
-        campuslife: 'Campus',
-        housing: 'Hostels'
-    };
-    return aliases[key.toLowerCase()] || key;
-};
-
-const buildFallbackBreakdownFromPredictions = (reviews, predictions = []) => {
-    const buckets = {};
-    reviews.forEach((review, i) => {
-        const rawFactor = review?.factor || 'General';
-        const key = FACTOR_TO_BREAKDOWN_KEY[rawFactor] || FACTOR_TO_BREAKDOWN_KEY[String(rawFactor).trim()] || null;
-        if (!key) return;
-
-        const predicted = Number(predictions[i]);
-        const reviewStoredRating = Number(review?.rating);
-        const value = Number.isFinite(predicted)
-            ? predicted
-            : (Number.isFinite(reviewStoredRating) ? reviewStoredRating : 3.0);
-
-        if (!buckets[key]) {
-            buckets[key] = {
-                sum: 0,
-                count: 0
-            };
-        }
-        buckets[key].sum += value;
-        buckets[key].count += 1;
-    });
-
-    const averages = {};
-    Object.entries(buckets).forEach(([key, bucket]) => {
-        if (bucket.count > 0) {
-            averages[key] = Number((bucket.sum / bucket.count).toFixed(1));
-        }
-    });
-    return averages;
-};
-
-const mergeBreakdowns = (primary = {}, fallback = {}) => {
-    const merged = {};
-
-    Object.entries(primary).forEach(([rawKey, rawValue]) => {
-        const key = normalizeBreakdownKey(rawKey);
-        if (!key) return;
-        const value = Number(rawValue);
-        merged[key] = Number.isFinite(value) ? Number(value.toFixed(1)) : 0;
-    });
-
-    Object.entries(fallback).forEach(([key, value]) => {
-        const existing = Number(merged[key]);
-        if (!Number.isFinite(existing) || existing <= 0) {
-            merged[key] = Number(value.toFixed(1));
-        }
-    });
-
-    return merged;
-};
 
 /**
  * Create a new review
@@ -278,6 +196,13 @@ export const getReviewStats = async (req, res) => {
 
         console.log(`[STATS] Using regex: ^${sanitizedName}$`);
 
+        const query = {
+            university: { $regex: new RegExp(`^${sanitizedName}$`, 'i') },
+            isApproved: true
+        };
+
+        const totalCount = await Review.countDocuments(query);
+
         // Check if we have cached sentiment analysis
         const universityDoc = await University.findOne({
             $or: [
@@ -286,51 +211,23 @@ export const getReviewStats = async (req, res) => {
             ]
         });
 
-        // Query reviews by both aliases (full name + apiName) to avoid split datasets.
-        const aliases = Array.from(new Set([
-            university,
-            universityDoc?.name,
-            universityDoc?.apiName
-        ].filter(Boolean)));
-
-        const aliasConditions = aliases.map((alias) => {
-            const aliasSanitized = escapeRegExp(alias).replace(/[\s\-]+/g, '[\\s\\-]+');
-            return { university: { $regex: new RegExp(`^${aliasSanitized}$`, 'i') } };
-        });
-
-        const query = {
-            $or: aliasConditions.length ? aliasConditions : [{ university: { $regex: new RegExp(`^${sanitizedName}$`, 'i') } }],
-            isApproved: true
-        };
-
-        const totalCount = await Review.countDocuments(query);
-
         // Check if cache is valid (less than 24 hours old and review count matches)
         const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
         const now = new Date();
         const cacheIsValid = universityDoc?.cachedSentiment?.lastAnalyzed &&
             (now - new Date(universityDoc.cachedSentiment.lastAnalyzed)) < CACHE_DURATION_MS &&
             universityDoc.cachedSentiment.totalReviews === totalCount;
-        const resolvedUniversityName = universityDoc?.name || universityDoc?.apiName || university;
-        const hostelPolicy = getHostelPolicy(resolvedUniversityName);
 
         if (cacheIsValid) {
-            const cachedBreakdown = {
-                ...(universityDoc.cachedSentiment.ratingBreakdown || {})
-            };
-            if (isInternalHostelUnavailable(resolvedUniversityName)) {
-                cachedBreakdown.Hostels = 0;
-            }
             console.log(`[STATS] ✅ Using cached sentiment analysis (age: ${Math.round((now - new Date(universityDoc.cachedSentiment.lastAnalyzed)) / 1000 / 60)} minutes)`);
             return res.json({
                 success: true,
                 university,
                 cached: true,
-                hostelAvailability: hostelPolicy,
                 stats: {
                     overall_rating: universityDoc.cachedSentiment.overallRating || 0,
                     total_reviews: universityDoc.cachedSentiment.totalReviews || totalCount,
-                    rating_breakdown: cachedBreakdown,
+                    rating_breakdown: universityDoc.cachedSentiment.ratingBreakdown || {},
                     review_distribution: universityDoc.cachedSentiment.reviewDistribution || {}
                 }
             });
@@ -383,21 +280,13 @@ export const getReviewStats = async (req, res) => {
 
         console.log('[STATS] AI Response:', JSON.stringify(aiStats, null, 2));
 
-        // Use all matched reviews for stable factor coverage fallback.
-        const coverageReviews = await Review.find(query, 'factor rating').limit(2000).lean();
-
-        // Fill zero/missing factor ratings from review-level data as fallback.
-        const fallbackBreakdown = buildFallbackBreakdownFromPredictions(coverageReviews, []);
-        const mergedRatingBreakdown = mergeBreakdowns(aiStats.rating_breakdown || {}, fallbackBreakdown);
-        if (isInternalHostelUnavailable(resolvedUniversityName)) {
-            mergedRatingBreakdown.Hostels = 0;
-        }
-
         // Fix keys for Mongoose schema (e.g., "Job Support" -> "JobSupport")
         const mappedRatingBreakdown = {};
-        for (const [k, v] of Object.entries(mergedRatingBreakdown)) {
-            const schemaKey = k.replace(/\s+/g, '');
-            mappedRatingBreakdown[schemaKey] = v;
+        if (aiStats.rating_breakdown) {
+            for (const [k, v] of Object.entries(aiStats.rating_breakdown)) {
+                const schemaKey = k.replace(/\s+/g, '');
+                mappedRatingBreakdown[schemaKey] = v;
+            }
         }
 
         // Cache the results in the University document
@@ -421,11 +310,10 @@ export const getReviewStats = async (req, res) => {
             success: true,
             university,
             cached: false,
-            hostelAvailability: hostelPolicy,
             stats: {
                 overall_rating: aiStats.overall_rating || 0,
                 total_reviews: totalCount, // Return the real total count
-                rating_breakdown: mergedRatingBreakdown,
+                rating_breakdown: aiStats.rating_breakdown || {},
                 review_distribution: aiStats.review_distribution || {}
             }
         });

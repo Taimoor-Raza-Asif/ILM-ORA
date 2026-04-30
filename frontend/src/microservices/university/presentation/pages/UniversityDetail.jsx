@@ -89,11 +89,14 @@ export function UniversityDetail() {
           university: uniData
         });
 
-        // 4. Fetch Reviews
-        const reviewsRes = await fetch(`${API_BASE}/api/reviews/${normalizedName}`);
-        if (reviewsRes.ok) {
+        // 4. Fetch Reviews (with alias fallback)
+        let reviewsList = [];
+        const reviewAliases = Array.from(new Set([normalizedName, name].filter(Boolean)));
+        for (const alias of reviewAliases) {
+          const reviewsRes = await fetch(`${API_BASE}/api/reviews/${encodeURIComponent(alias)}`);
+          if (!reviewsRes.ok) continue;
           const reviewsData = await reviewsRes.json();
-          const reviewsList = (reviewsData.reviews || [])
+          const candidateReviews = (reviewsData.reviews || [])
             .map(r => ({
               text: r.reviewText || r.review_text || '',
               factor: r.factor || 'General',
@@ -103,8 +106,12 @@ export function UniversityDetail() {
             }))
             .filter(r => r.text)
             .slice(0, 10);
-          setReviews(reviewsList);
+          if (candidateReviews.length > 0) {
+            reviewsList = candidateReviews;
+            break;
+          }
         }
+        setReviews(reviewsList);
 
       } catch (err) {
         console.error(err);
@@ -455,7 +462,6 @@ export function UniversityDetail() {
                 <TabsTrigger value="programs">Programs</TabsTrigger>
                 <TabsTrigger value="sentiments">AI Reviews</TabsTrigger>
                 <TabsTrigger value="scholarships">Aid</TabsTrigger>
-                <TabsTrigger value="hostels">Housing</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview">
@@ -1036,26 +1042,6 @@ export function UniversityDetail() {
 
           {/* Right Sidebar */}
           <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button className="w-full bg-primary">
-                  <Heart className="w-4 h-4 mr-2" /> Add to Favorites
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Share2 className="w-4 h-4 mr-2" /> Share University
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <ExternalLink className="w-4 h-4 mr-2" /> Visit Website
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <MessageSquare className="w-4 h-4 mr-2" /> Contact Admissions
-                </Button>
-              </CardContent>
-            </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Key Stats</CardTitle>

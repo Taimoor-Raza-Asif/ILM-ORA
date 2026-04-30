@@ -4,7 +4,7 @@ import { Button } from "./../../../shared/components/ui/button";
 import { Input } from "./../../../shared/components/ui/input";
 import { Textarea } from "./../../../shared/components/ui/textarea";
 import { Label } from "./../../../shared/components/ui/label";
-import { Mail, Github, Linkedin, Twitter, Users, Target, Heart, Send, CheckCircle2, AlertCircle, Loader2, Phone, MessageSquare, Sparkles, Award, TrendingUp } from "lucide-react";
+import { Mail, Github, Linkedin, Twitter, Users, Target, Heart, Send, CheckCircle2, AlertCircle, Loader2, Phone, MessageSquare, Sparkles, Award, TrendingUp, Database, GraduationCap, Briefcase, Building2, ClipboardList, Globe } from "lucide-react";
 import { axiosClient } from "@/shared/utils/axiosClient";
 import { motion } from "framer-motion";
 
@@ -151,6 +151,127 @@ export function AboutPage() {
               </CardContent>
             </Card>
           </motion.div>
+        </div>
+
+        {/* Data Sources Section */}
+        <div className="mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4 tracking-wide uppercase">
+              <Database className="w-3.5 h-3.5" />
+              How we built the platform
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              Our Data Sources
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Every recommendation on ILM-ORA is powered by curated, real-world data. Here's where each module gets its information from.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                icon: GraduationCap,
+                title: "Scholarships",
+                subtitle: "Funding opportunities",
+                sources: ["EduVision"],
+                description: "Bachelor-level scholarship listings, eligibility criteria and deadlines curated from EduVision's scholarship directory.",
+                gradient: "from-blue-500 to-indigo-600",
+                ring: "ring-blue-500/20",
+                chipBg: "bg-blue-50 dark:bg-blue-950/40",
+                chipText: "text-blue-700 dark:text-blue-300",
+                chipBorder: "border-blue-200 dark:border-blue-900"
+              },
+              {
+                icon: Briefcase,
+                title: "Career & Salary",
+                subtitle: "Compensation insights",
+                sources: ["PayScale"],
+                description: "Role-wise salary benchmarks, growth trends and compensation ranges sourced from PayScale to power career insights.",
+                gradient: "from-purple-500 to-fuchsia-600",
+                ring: "ring-purple-500/20",
+                chipBg: "bg-purple-50 dark:bg-purple-950/40",
+                chipText: "text-purple-700 dark:text-purple-300",
+                chipBorder: "border-purple-200 dark:border-purple-900"
+              },
+              {
+                icon: Building2,
+                title: "Universities",
+                subtitle: "Programs & profiles",
+                sources: ["EduVision", "University Sites"],
+                description: "University profiles and program details aggregated from EduVision and augmented by scraping official university websites.",
+                gradient: "from-emerald-500 to-teal-600",
+                ring: "ring-emerald-500/20",
+                chipBg: "bg-emerald-50 dark:bg-emerald-950/40",
+                chipText: "text-emerald-700 dark:text-emerald-300",
+                chipBorder: "border-emerald-200 dark:border-emerald-900"
+              },
+              {
+                icon: ClipboardList,
+                title: "Student Reviews",
+                subtitle: "Factor-based sentiment",
+                sources: ["Google Survey", "Uni Groups", "LinkedIn"],
+                description: "Factor-wise sentiment reviews gathered via a Google survey circulated across university student groups and LinkedIn pages.",
+                gradient: "from-amber-500 to-orange-600",
+                ring: "ring-amber-500/20",
+                chipBg: "bg-amber-50 dark:bg-amber-950/40",
+                chipText: "text-amber-700 dark:text-amber-300",
+                chipBorder: "border-amber-200 dark:border-amber-900"
+              }
+            ].map((source, index) => {
+              const Icon = source.icon;
+              return (
+                <motion.div
+                  key={source.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                  viewport={{ once: true }}
+                  className="h-full"
+                >
+                  <Card className="group relative overflow-hidden h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-border/60">
+                    <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${source.gradient}`} />
+                    <CardContent className="p-6 flex flex-col h-full items-start">
+                      <div
+                        className={`w-14 h-14 rounded-xl bg-gradient-to-br ${source.gradient} flex items-center justify-center mb-5 shadow-lg ring-4 ${source.ring} group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        <Icon className="w-7 h-7 text-white" strokeWidth={2.2} />
+                      </div>
+                      <h3 className="font-bold text-lg leading-tight mb-1">{source.title}</h3>
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                        {source.subtitle}
+                      </p>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-5 flex-1">
+                        {source.description}
+                      </p>
+                      <div className="w-full pt-4 border-t border-border/50">
+                        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                          Sourced from
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {source.sources.map((s) => (
+                            <span
+                              key={s}
+                              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold leading-none border ${source.chipBg} ${source.chipText} ${source.chipBorder} whitespace-nowrap`}
+                            >
+                              <Globe className="w-3 h-3 shrink-0" />
+                              <span>{s}</span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Team Section - Simple & Clean */}

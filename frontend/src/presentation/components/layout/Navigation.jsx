@@ -22,7 +22,8 @@ import {
   Moon,
   Sun,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  ShieldCheck
 } from "lucide-react";
 import { useTheme } from "../../../app/providers/ThemeProvider";
 import { useAuth } from "../../../app/providers/AuthProvider";
@@ -42,17 +43,27 @@ export function Navigation() {
     { name: "Contact", path: "/about", icon: Mail },
   ];
 
+  const isAdmin = user?.role === "admin";
+
   // Protected links only for authenticated users
   const authenticatedLinks = [
-    { name: "Dashboard", path: "/dashboard", icon: Home },
-    { name: "Quiz", path: "/quiz-intro", icon: ClipboardList },
+    { name: "Dashboard", path: "/dashboard", icon: Home, hideForAdmin: true },
+    { name: "Quiz", path: "/quiz-intro", icon: ClipboardList, hideForAdmin: true },
     { name: "Universities", path: "/universities", icon: Building2 },
     { name: "Careers", path: "/careers", icon: Briefcase },
-    { name: "Contact", path: "/about", icon: Mail },
+    { name: "Feedback", path: "/feedback", icon: Mail },
+    { name: "Contact", path: "/about", icon: Mail, hideForAdmin: true },
+    { name: "Console", path: "/admin", icon: ShieldCheck, adminOnly: true },
   ];
 
-  // Determine which links to show based on auth state
-  const navLinks = isAuthenticated ? authenticatedLinks : publicLinks;
+  // Determine which links to show based on auth state and role
+  const navLinks = isAuthenticated
+    ? authenticatedLinks.filter((link) => {
+        if (link.adminOnly && !isAdmin) return false;
+        if (link.hideForAdmin && isAdmin) return false;
+        return true;
+      })
+    : publicLinks;
 
   // Helper to generate initials from name (e.g., "Demo User" -> "DU")
   const getInitials = (name) => {
@@ -143,12 +154,14 @@ export function Navigation() {
                     </div>
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard" className="cursor-pointer">
-                      <UserIcon className="mr-2 h-4 w-4" />
-                      Dashboard
-                    </Link>
-                  </DropdownMenuItem>
+                  {!isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard" className="cursor-pointer">
+                        <UserIcon className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link to="/settings" className="cursor-pointer">
                       <ClipboardList className="mr-2 h-4 w-4" />
@@ -228,12 +241,14 @@ export function Navigation() {
                       <span className="text-xs text-muted-foreground">{user?.email}</span>
                    </div>
                 </div>
-                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
-                    <UserIcon className="w-4 h-4 mr-2" />
-                    Dashboard
-                  </Button>
-                </Link>
+                {!isAdmin && (
+                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      <UserIcon className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                )}
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start text-red-600 hover:text-red-600 hover:bg-red-100/10" 

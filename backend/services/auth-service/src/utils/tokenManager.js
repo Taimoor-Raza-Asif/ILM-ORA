@@ -6,5 +6,3 @@ export const signToken = payload => {
     expiresIn: '1h'
   });
 };
-
-export const verifyToken = (token) => jwt.verify(token, JWT_SECRET);

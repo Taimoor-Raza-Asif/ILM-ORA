@@ -7,19 +7,15 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Input } from "@/shared/components/ui/input";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { Building2, MapPin, Banknote, Star, TrendingUp, Search, Filter, Heart, ArrowRight, ArrowLeft, Users, Award, Loader2, Brain, ChevronLeft, ChevronRight } from "lucide-react";
+import { Building2, MapPin, Banknote, Star, TrendingUp, Search, Heart, ArrowRight, ArrowLeft, Users, Award, Loader2, Brain, ChevronLeft, ChevronRight } from "lucide-react";
 import { ImageWithFallback } from "@/shared/components/ImageWithFallback";
-import { CompareDialog } from "@/shared/components/CompareDialog";
 import { getUniversityImage } from "@/shared/utils/universityImages";
 
 export function UniversityRecommendations() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [cityFilter, setCityFilter] = useState("all");
-  const [selectedUniversities, setSelectedUniversities] = useState([]);
-  const [compareDialogOpen, setCompareDialogOpen] = useState(false);
   const [saved, setSaved] = useState([]);
   const [sentimentRatings, setSentimentRatings] = useState({});
   const [loadingSentiments, setLoadingSentiments] = useState(true);
@@ -121,14 +117,6 @@ export function UniversityRecommendations() {
     setSaved(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
-  const toggleUniversitySelection = id => {
-    setSelectedUniversities(prev => prev.includes(id) ? prev.filter(uniId => uniId !== id) : [...prev, id]);
-  };
-
-  const getSelectedUniversitiesData = () => {
-    return universities.filter(uni => selectedUniversities.includes(uni.id));
-  };
-
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -186,23 +174,12 @@ export function UniversityRecommendations() {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" size="sm" className="sm:size-default">
-                <Filter className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">More </span>
-                Filters
-              </Button>
             </div>
           </CardContent>
         </Card>
 
         <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <p className="text-xs sm:text-sm text-muted-foreground">Showing {filteredUniversities.length} of {totalCount} universit{totalCount !== 1 ? "ies" : "y"}{selectedUniversities.length > 0 && ` • ${selectedUniversities.length} selected`}</p>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm" disabled={selectedUniversities.length < 2} onClick={() => setCompareDialogOpen(true)}>
-              Compare Selected ({selectedUniversities.length})
-            </Button>
-            {selectedUniversities.length > 0 && <Button variant="ghost" size="sm" className="text-xs sm:text-sm" onClick={() => setSelectedUniversities([])}>Clear</Button>}
-          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground">Showing {filteredUniversities.length} of {totalCount} universit{totalCount !== 1 ? "ies" : "y"}</p>
         </div>
 
         <div className="grid gap-6">
@@ -211,14 +188,11 @@ export function UniversityRecommendations() {
             const hasSentiment = sentiment && sentiment > 0;
 
             return (
-              <Card key={university.id} className={`hover:shadow-xl transition-all border-2 overflow-hidden ${selectedUniversities.includes(university.id) ? 'border-primary shadow-lg' : 'hover:border-primary/50'}`}>
+              <Card key={university.id} className="hover:shadow-xl transition-all border-2 overflow-hidden hover:border-primary/50">
                 <div className="flex flex-col lg:flex-row">
                   <div className="lg:w-80 h-64 lg:h-auto relative overflow-hidden">
                     <ImageWithFallback src={university.image} alt={university.name} className="w-full h-full object-cover" />
                     <div className="absolute top-4 right-4 flex gap-2">
-                      <div className="bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg">
-                        <Checkbox checked={selectedUniversities.includes(university.id)} onCheckedChange={() => toggleUniversitySelection(university.id)} />
-                      </div>
                       <Button size="icon" variant={saved.includes(university.id) ? "default" : "secondary"} className="rounded-full shadow-lg" onClick={() => toggleSave(university.id)}>
                         <Heart className={`w-5 h-5 ${saved.includes(university.id) ? "fill-current" : ""}`} />
                       </Button>
@@ -294,8 +268,12 @@ export function UniversityRecommendations() {
 
                       <div className="flex flex-wrap gap-3 pt-4 border-t">
                         <Link to={`/university/${university.apiName}`} className="flex-1 min-w-[200px]"><Button className="w-full bg-primary hover:bg-primary/90">View Details <ArrowRight className="ml-2 w-4 h-4" /></Button></Link>
-                        <Button variant="outline" className="flex-1 min-w-[120px]">Compare</Button>
-                        <Link to="/scholarships" className="flex-1 min-w-[150px]"><Button variant="outline" className="w-full">Find Scholarships</Button></Link>
+                        <Link
+                          to={`/scholarships?university=${encodeURIComponent(university.apiName)}&name=${encodeURIComponent(university.name)}`}
+                          className="flex-1 min-w-[150px]"
+                        >
+                          <Button variant="outline" className="w-full">Find Scholarships</Button>
+                        </Link>
                       </div>
                     </div>
                   </CardContent>
@@ -351,7 +329,6 @@ export function UniversityRecommendations() {
           </CardContent>
         </Card>
 
-        <CompareDialog open={compareDialogOpen} onOpenChange={setCompareDialogOpen} universities={getSelectedUniversitiesData()} />
       </div>
     </div>
   );

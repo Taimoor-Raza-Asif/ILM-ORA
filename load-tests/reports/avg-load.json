@@ -1,0 +1,317 @@
+{
+    "metrics": {
+        "data_received": {
+            "count": 5484171804,
+            "rate": 4563588.059492873
+        },
+        "http_req_receiving": {
+            "min": 0,
+            "med": 0,
+            "max": 304.9637,
+            "p(90)": 5.040619999999998,
+            "p(95)": 9.138169999999999,
+            "avg": 1.6640749953258793
+        },
+        "checks": {
+            "passes": 28517,
+            "fails": 7,
+            "thresholds": {
+                "rate>0.95": false
+            },
+            "value": 0.9997545926237554
+        },
+        "http_req_waiting": {
+            "p(95)": 8380.62853,
+            "avg": 1903.9113434655967,
+            "min": 0,
+            "med": 761.067,
+            "max": 25123.4511,
+            "p(90)": 6699.85046
+        },
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "http_req_blocked": {
+            "avg": 0.03232777549265231,
+            "min": 0,
+            "med": 0,
+            "max": 71.7084,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus": {
+            "value": 2,
+            "min": 1,
+            "max": 50
+        },
+        "data_sent": {
+            "count": 4026564,
+            "rate": 3350.6571361935144
+        },
+        "http_req_duration": {
+            "p(90)": 6700.75694,
+            "p(95)": 8380.62853,
+            "avg": 1905.6552553415934,
+            "min": 0,
+            "med": 763.1405,
+            "max": 25123.4511,
+            "thresholds": {
+                "p(95)<2500": true,
+                "p(99)<6000": true
+            }
+        },
+        "http_reqs": {
+            "count": 26743,
+            "rate": 22.25386801084576
+        },
+        "iteration_duration": {
+            "p(95)": 43228.36509999998,
+            "avg": 30596.38631811549,
+            "min": 5754.1196,
+            "med": 31453.425,
+            "max": 54492.8599,
+            "p(90)": 39325.033039999995
+        },
+        "http_req_failed": {
+            "passes": 1785,
+            "fails": 24958,
+            "thresholds": {
+                "rate<0.05": true
+            },
+            "value": 0.06674643832030812
+        },
+        "http_req_tls_handshaking": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0
+        },
+        "http_req_duration{ml:true}": {
+            "avg": 977.4317712282667,
+            "min": 403.2785,
+            "med": 822.3567,
+            "max": 8249.0376,
+            "p(90)": 1672.0030000000002,
+            "p(95)": 2029.88071,
+            "thresholds": {
+                "p(95)<30000": false
+            }
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(90)": 6927.372369999999,
+            "p(95)": 8527.104374999999,
+            "avg": 1938.7012010577857,
+            "min": 0,
+            "med": 715.79855,
+            "max": 25123.4511
+        },
+        "group_duration": {
+            "avg": 4085.551319117051,
+            "min": 2.0488,
+            "med": 1497.3371,
+            "max": 30673.8729,
+            "p(90)": 13375.8739,
+            "p(95)": 15790.0919
+        },
+        "http_req_sending": {
+            "max": 87.8369,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0798368806790562,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_connecting": {
+            "avg": 0.004289952510937442,
+            "min": 0,
+            "med": 0,
+            "max": 47.1625,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "iterations": {
+            "count": 1783,
+            "rate": 1.4837021524637473
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "gateway - health & info": {
+                "id": "e58088cbc7254847b6a3109bce4231e5",
+                "groups": {},
+                "checks": {
+                        "health 200": {
+                            "name": "health 200",
+                            "path": "::gateway - health & info::health 200",
+                            "id": "e8c3119f56ba5d09cb2d816d7cc88431",
+                            "passes": 1783,
+                            "fails": 0
+                        },
+                        "api info 200": {
+                            "id": "1fe28012d6c08469242f34a5a40373a8",
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "api info 200",
+                            "path": "::gateway - health & info::api info 200"
+                        }
+                    },
+                "name": "gateway - health & info",
+                "path": "::gateway - health & info"
+            },
+            "universities - browse (public)": {
+                "id": "0f6090546cdd23a8a7665d844ed8f53b",
+                "groups": {},
+                "checks": {
+                        "unis list 200": {
+                            "id": "d61cd5bf0ea2ae482546535beb579b6f",
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "unis list 200",
+                            "path": "::universities - browse (public)::unis list 200"
+                        },
+                        "uni detail 2xx": {
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "uni detail 2xx",
+                            "path": "::universities - browse (public)::uni detail 2xx",
+                            "id": "d2d3db304b54872e0256b4613de7de41"
+                        },
+                        "programs 2xx": {
+                            "fails": 0,
+                            "name": "programs 2xx",
+                            "path": "::universities - browse (public)::programs 2xx",
+                            "id": "04e4af0030557bd9269e4163e3214d0a",
+                            "passes": 1783
+                        },
+                        "scholarships 2xx": {
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "scholarships 2xx",
+                            "path": "::universities - browse (public)::scholarships 2xx",
+                            "id": "ab51efac1dc4084ac2067940ed463710"
+                        }
+                    },
+                "name": "universities - browse (public)",
+                "path": "::universities - browse (public)"
+            },
+            "careers - browse": {
+                "name": "careers - browse",
+                "path": "::careers - browse",
+                "id": "5a75555c7172cc29306b48c0a8991051",
+                "groups": {},
+                "checks": {
+                        "careers list 2xx": {
+                            "name": "careers list 2xx",
+                            "path": "::careers - browse::careers list 2xx",
+                            "id": "ef127a82b7b5e95ab888090abcd0d7db",
+                            "passes": 1783,
+                            "fails": 0
+                        },
+                        "careers search 2xx": {
+                            "path": "::careers - browse::careers search 2xx",
+                            "id": "e091be12cddb2ce835978e479a6a70d4",
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "careers search 2xx"
+                        },
+                        "careers stats 2xx": {
+                            "name": "careers stats 2xx",
+                            "path": "::careers - browse::careers stats 2xx",
+                            "id": "42b6fde654acda70b7c435d4422e0f7e",
+                            "passes": 1783,
+                            "fails": 0
+                        }
+                    }
+            },
+            "reviews - per university": {
+                "name": "reviews - per university",
+                "path": "::reviews - per university",
+                "id": "7efee216b681dc399a3190a411c8701b",
+                "groups": {},
+                "checks": {
+                        "reviews by uni 2xx": {
+                            "name": "reviews by uni 2xx",
+                            "path": "::reviews - per university::reviews by uni 2xx",
+                            "id": "5aa3cd34d5972952e6095efb672c4ec7",
+                            "passes": 1783,
+                            "fails": 0
+                        }
+                    }
+            },
+            "sentiment stats (ML - DeBERTa)": {
+                "name": "sentiment stats (ML - DeBERTa)",
+                "path": "::sentiment stats (ML - DeBERTa)",
+                "id": "11fc904d62094e4ff471b5c33445de35",
+                "groups": {},
+                "checks": {
+                        "sentiment stats 2xx": {
+                            "passes": 1783,
+                            "fails": 0,
+                            "name": "sentiment stats 2xx",
+                            "path": "::sentiment stats (ML - DeBERTa)::sentiment stats 2xx",
+                            "id": "0035bf6b4495b619617e8a221ffabc25"
+                        }
+                    }
+            },
+            "auth - register + login": {
+                "name": "auth - register + login",
+                "path": "::auth - register + login",
+                "id": "9de58d17f949870cd44a050e1152a0d2",
+                "groups": {},
+                "checks": {
+                        "register: 201 or 200": {
+                            "fails": 2,
+                            "name": "register: 201 or 200",
+                            "path": "::auth - register + login::register: 201 or 200",
+                            "id": "295492e171f28d800364e96bc7f911f9",
+                            "passes": 1781
+                        },
+                        "register: has token": {
+                            "passes": 1781,
+                            "fails": 2,
+                            "name": "register: has token",
+                            "path": "::auth - register + login::register: has token",
+                            "id": "8680833d66d0bb692f2db915af7f5382"
+                        },
+                        "login 200": {
+                            "fails": 0,
+                            "name": "login 200",
+                            "path": "::auth - register + login::login 200",
+                            "id": "a0994cbfde8e51c76b140cf36fdf225d",
+                            "passes": 1781
+                        },
+                        "login has token": {
+                            "passes": 1781,
+                            "fails": 0,
+                            "name": "login has token",
+                            "path": "::auth - register + login::login has token",
+                            "id": "0a9018ed44ddc8b6630774b43b5b2c82"
+                        }
+                    }
+            },
+            "recommendations (authenticated)": {
+                "name": "recommendations (authenticated)",
+                "path": "::recommendations (authenticated)",
+                "id": "508a0a80598aaca527906b44d33e8a50",
+                "groups": {},
+                "checks": {
+                        "recommend 2xx": {
+                            "name": "recommend 2xx",
+                            "path": "::recommendations (authenticated)::recommend 2xx",
+                            "id": "b4f46bc6a5235378a5894c98b1f0f593",
+                            "passes": 1780,
+                            "fails": 3
+                        }
+                    }
+            }
+        },
+        "checks": {}
+    }
+}

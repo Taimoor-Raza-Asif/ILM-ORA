@@ -126,6 +126,122 @@ class ScholarshipMapper {
     return 'unknown';
   }
 
+  normalizeText(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  getScholarshipText(scholarship) {
+    return this.normalizeText(
+      [
+        scholarship.title,
+        scholarship.area,
+        scholarship.eligibility,
+        scholarship.offered_by,
+        scholarship.full_content,
+        scholarship.summary
+      ].join(' ')
+    );
+  }
+
+  isInternationalScholarship(scholarship) {
+    const text = this.getScholarshipText(scholarship);
+    const internationalKeywords = [
+      'usa',
+      'united states',
+      'uk',
+      'united kingdom',
+      'germany',
+      'netherlands',
+      'finland',
+      'japan',
+      'canada',
+      'australia',
+      'china',
+      'chinese',
+      'hungary',
+      'hungaricum',
+      'europe',
+      'foreign university',
+      'study abroad',
+      'international students',
+      'fulbright',
+      'daad',
+      'commonwealth',
+      'erasmus',
+      'rotterdam',
+      'kyoto'
+    ];
+    return internationalKeywords.some((keyword) => text.includes(keyword));
+  }
+
+  isNoiseScholarship(scholarship) {
+    const title = this.normalizeText(scholarship.title);
+    const link = this.normalizeText(scholarship.url);
+    const noisyKeywords = ['latest scholarships', 'bachelor php', 'scholarships list', 'all scholarships'];
+    if (noisyKeywords.some((keyword) => title.includes(keyword))) return true;
+    if (link.includes('bachelor.php')) return true;
+    return false;
+  }
+
+  referencesSpecificInstitution(scholarship) {
+    const text = this.getScholarshipText(scholarship);
+    const genericInstitutionPhrases = [
+      'public universities',
+      'private universities',
+      'government recognized institutions',
+      'all universities in pakistan'
+    ];
+    if (genericInstitutionPhrases.some((phrase) => text.includes(phrase))) return false;
+
+    return (
+      text.includes(' university') ||
+      text.includes(' college') ||
+      text.includes(' institute') ||
+      text.includes(' campus')
+    );
+  }
+
+  getUniversityMatchStrength(scholarship, university) {
+    const scholarshipText = this.getScholarshipText(scholarship);
+    const universityName = this.normalizeText(university.University);
+    if (!universityName) return 0;
+
+    if (scholarshipText.includes(universityName)) return 3;
+
+    const genericTokens = new Set([
+      'university',
+      'college',
+      'institute',
+      'campus',
+      'pakistan',
+      'islamabad',
+      'lahore',
+      'karachi',
+      'peshawar',
+      'quetta',
+      'multan',
+      'faisalabad',
+      'rawalpindi',
+      'the',
+      'of',
+      'for',
+      'and',
+      'in'
+    ]);
+    const tokens = universityName
+      .split(' ')
+      .filter((token) => token.length > 3 && !genericTokens.has(token));
+    const matchedTokens = tokens.filter((token) => scholarshipText.includes(token));
+
+    if (matchedTokens.length >= 2) return 2;
+    if (matchedTokens.length === 1) return 1;
+    return 0;
+  }
+
   /**
    * Check if scholarship is "All Pakistan" type
    */
@@ -192,8 +308,16 @@ class ScholarshipMapper {
       if (!this.isBachelorLevelScholarship(scholarship)) {
         continue; // Skip non-bachelor scholarships
       }
+      // FILTER: Exclude international/non-local scholarships and noisy listing entries
+      if (this.isInternationalScholarship(scholarship) || this.isNoiseScholarship(scholarship)) {
+        continue;
+      }
 
       let isApplicable = false;
+      const matchStrength = this.getUniversityMatchStrength(scholarship, university);
+      if (matchStrength === 0 && this.referencesSpecificInstitution(scholarship)) {
+        continue;
+      }
 
       // Rule 1: All Pakistan scholarships apply to all universities
       if (this.isAllPakistanScholarship(scholarship)) {
@@ -244,14 +368,29 @@ class ScholarshipMapper {
       }
 
       if (isApplicable) {
-        applicableScholarships.push({
+        const mapped = {
           ...scholarship,
-          matchReason: this.getMatchReason(scholarship, university, universityLocation)
-        });
+          matchReason: this.getMatchReason(scholarship, university, universityLocation),
+          _matchStrength: matchStrength
+        };
+        // Keep weak matches only when they are Pakistan-wide scholarships.
+        if (mapped._matchStrength >= 1 || this.isAllPakistanScholarship(scholarship) || this.isQuotaScholarship(scholarship)) {
+          applicableScholarships.push(mapped);
+        }
+      }
+    }
+    const dedupedByTitle = new Map();
+    for (const scholarship of applicableScholarships) {
+      const key = this.normalizeText(scholarship.title);
+      const existing = dedupedByTitle.get(key);
+      if (!existing || (scholarship._matchStrength || 0) > (existing._matchStrength || 0)) {
+        dedupedByTitle.set(key, scholarship);
       }
     }
 
-    return applicableScholarships;
+    return Array.from(dedupedByTitle.values())
+      .sort((a, b) => (b._matchStrength || 0) - (a._matchStrength || 0))
+      .map(({ _matchStrength, ...rest }) => rest);
   }
 
   /**
@@ -294,9 +433,17 @@ class ScholarshipMapper {
    * Get all scholarships for a university by name
    */
   getScholarshipsForUniversity(universityName) {
-    const university = this.universities.find(u => 
-      u.University?.toLowerCase() === universityName.toLowerCase()
+    const normalizedInput = this.normalizeText(universityName);
+    let university = this.universities.find(
+      (u) => this.normalizeText(u.University) === normalizedInput
     );
+
+    if (!university) {
+      university = this.universities.find((u) => {
+        const dbName = this.normalizeText(u.University);
+        return dbName.includes(normalizedInput) || normalizedInput.includes(dbName);
+      });
+    }
 
     if (!university) {
       console.warn(`University not found: ${universityName}`);

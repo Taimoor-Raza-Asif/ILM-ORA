@@ -1,0 +1,317 @@
+{
+    "root_group": {
+        "checks": {},
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+                "gateway - health & info": {
+                    "checks": {
+                        "health 200": {
+                            "name": "health 200",
+                            "path": "::gateway - health & info::health 200",
+                            "id": "e8c3119f56ba5d09cb2d816d7cc88431",
+                            "passes": 2619,
+                            "fails": 0
+                        },
+                        "api info 200": {
+                            "name": "api info 200",
+                            "path": "::gateway - health & info::api info 200",
+                            "id": "1fe28012d6c08469242f34a5a40373a8",
+                            "passes": 2619,
+                            "fails": 0
+                        }
+                    },
+                    "name": "gateway - health & info",
+                    "path": "::gateway - health & info",
+                    "id": "e58088cbc7254847b6a3109bce4231e5",
+                    "groups": {}
+                },
+                "universities - browse (public)": {
+                    "name": "universities - browse (public)",
+                    "path": "::universities - browse (public)",
+                    "id": "0f6090546cdd23a8a7665d844ed8f53b",
+                    "groups": {},
+                    "checks": {
+                            "unis list 200": {
+                                "name": "unis list 200",
+                                "path": "::universities - browse (public)::unis list 200",
+                                "id": "d61cd5bf0ea2ae482546535beb579b6f",
+                                "passes": 2619,
+                                "fails": 0
+                            },
+                            "uni detail 2xx": {
+                                "fails": 0,
+                                "name": "uni detail 2xx",
+                                "path": "::universities - browse (public)::uni detail 2xx",
+                                "id": "d2d3db304b54872e0256b4613de7de41",
+                                "passes": 2619
+                            },
+                            "programs 2xx": {
+                                "fails": 0,
+                                "name": "programs 2xx",
+                                "path": "::universities - browse (public)::programs 2xx",
+                                "id": "04e4af0030557bd9269e4163e3214d0a",
+                                "passes": 2619
+                            },
+                            "scholarships 2xx": {
+                                "fails": 0,
+                                "name": "scholarships 2xx",
+                                "path": "::universities - browse (public)::scholarships 2xx",
+                                "id": "ab51efac1dc4084ac2067940ed463710",
+                                "passes": 2619
+                            }
+                        }
+                },
+                "careers - browse": {
+                    "name": "careers - browse",
+                    "path": "::careers - browse",
+                    "id": "5a75555c7172cc29306b48c0a8991051",
+                    "groups": {},
+                    "checks": {
+                            "careers list 2xx": {
+                                "passes": 2619,
+                                "fails": 0,
+                                "name": "careers list 2xx",
+                                "path": "::careers - browse::careers list 2xx",
+                                "id": "ef127a82b7b5e95ab888090abcd0d7db"
+                            },
+                            "careers search 2xx": {
+                                "name": "careers search 2xx",
+                                "path": "::careers - browse::careers search 2xx",
+                                "id": "e091be12cddb2ce835978e479a6a70d4",
+                                "passes": 2619,
+                                "fails": 0
+                            },
+                            "careers stats 2xx": {
+                                "name": "careers stats 2xx",
+                                "path": "::careers - browse::careers stats 2xx",
+                                "id": "42b6fde654acda70b7c435d4422e0f7e",
+                                "passes": 2619,
+                                "fails": 0
+                            }
+                        }
+                },
+                "reviews - per university": {
+                    "name": "reviews - per university",
+                    "path": "::reviews - per university",
+                    "id": "7efee216b681dc399a3190a411c8701b",
+                    "groups": {},
+                    "checks": {
+                            "reviews by uni 2xx": {
+                                "name": "reviews by uni 2xx",
+                                "path": "::reviews - per university::reviews by uni 2xx",
+                                "id": "5aa3cd34d5972952e6095efb672c4ec7",
+                                "passes": 2619,
+                                "fails": 0
+                            }
+                        }
+                },
+                "sentiment stats (ML - DeBERTa)": {
+                    "id": "11fc904d62094e4ff471b5c33445de35",
+                    "groups": {},
+                    "checks": {
+                            "sentiment stats 2xx": {
+                                "fails": 0,
+                                "name": "sentiment stats 2xx",
+                                "path": "::sentiment stats (ML - DeBERTa)::sentiment stats 2xx",
+                                "id": "0035bf6b4495b619617e8a221ffabc25",
+                                "passes": 2619
+                            }
+                        },
+                    "name": "sentiment stats (ML - DeBERTa)",
+                    "path": "::sentiment stats (ML - DeBERTa)"
+                },
+                "auth - register + login": {
+                    "id": "9de58d17f949870cd44a050e1152a0d2",
+                    "groups": {},
+                    "checks": {
+                            "register: 201 or 200": {
+                                "name": "register: 201 or 200",
+                                "path": "::auth - register + login::register: 201 or 200",
+                                "id": "295492e171f28d800364e96bc7f911f9",
+                                "passes": 2619,
+                                "fails": 0
+                            },
+                            "register: has token": {
+                                "fails": 0,
+                                "name": "register: has token",
+                                "path": "::auth - register + login::register: has token",
+                                "id": "8680833d66d0bb692f2db915af7f5382",
+                                "passes": 2619
+                            },
+                            "login 200": {
+                                "passes": 2619,
+                                "fails": 0,
+                                "name": "login 200",
+                                "path": "::auth - register + login::login 200",
+                                "id": "a0994cbfde8e51c76b140cf36fdf225d"
+                            },
+                            "login has token": {
+                                "path": "::auth - register + login::login has token",
+                                "id": "0a9018ed44ddc8b6630774b43b5b2c82",
+                                "passes": 2619,
+                                "fails": 0,
+                                "name": "login has token"
+                            }
+                        },
+                    "name": "auth - register + login",
+                    "path": "::auth - register + login"
+                },
+                "recommendations (authenticated)": {
+                    "groups": {},
+                    "checks": {
+                            "recommend 2xx": {
+                                "passes": 2617,
+                                "fails": 1,
+                                "name": "recommend 2xx",
+                                "path": "::recommendations (authenticated)::recommend 2xx",
+                                "id": "b4f46bc6a5235378a5894c98b1f0f593"
+                            }
+                        },
+                    "name": "recommendations (authenticated)",
+                    "path": "::recommendations (authenticated)",
+                    "id": "508a0a80598aaca527906b44d33e8a50"
+                }
+            }
+    },
+    "metrics": {
+        "http_req_failed": {
+            "passes": 2619,
+            "fails": 36665,
+            "thresholds": {
+                "rate<0.05": true
+            },
+            "value": 0.06666836371041646
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 30
+        },
+        "data_received": {
+            "count": 8048663995,
+            "rate": 4456264.09905293
+        },
+        "http_req_tls_handshaking": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "iterations": {
+            "rate": 1.4500488134018104,
+            "count": 2619
+        },
+        "data_sent": {
+            "count": 5915396,
+            "rate": 3275.14812928668
+        },
+        "http_reqs": {
+            "count": 39284,
+            "rate": 21.750178535959037
+        },
+        "http_req_receiving": {
+            "max": 460.2632,
+            "p(90)": 6.085250000000002,
+            "p(95)": 9.459524999999996,
+            "avg": 1.9063547831178094,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_duration": {
+            "max": 26905.7644,
+            "p(90)": 3241.004860000001,
+            "p(95)": 4362.934319999999,
+            "avg": 1131.299947291516,
+            "min": 0,
+            "med": 590.3143,
+            "thresholds": {
+                "p(95)<3000": true,
+                "p(99)<6000": true
+            }
+        },
+        "http_req_duration{ml:true}": {
+            "p(90)": 1603.3846000000012,
+            "p(95)": 2012.0115899999996,
+            "avg": 917.4040641848022,
+            "min": 389.5487,
+            "med": 740.9466,
+            "max": 5657.4509,
+            "thresholds": {
+                "p(95)<30000": false
+            }
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(95)": 4469.655339999991,
+            "avg": 1174.9687891285953,
+            "min": 0,
+            "med": 616.2537,
+            "max": 26905.7644,
+            "p(90)": 3374.98256
+        },
+        "http_req_sending": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.2543209194583037,
+            "min": 0,
+            "med": 0,
+            "max": 3281.139
+        },
+        "vus_max": {
+            "value": 30,
+            "min": 30,
+            "max": 30
+        },
+        "http_req_blocked": {
+            "avg": 0.023420962732919257,
+            "min": 0,
+            "med": 0,
+            "max": 54.7326,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_connecting": {
+            "avg": 0.0014356990123205373,
+            "min": 0,
+            "med": 0,
+            "max": 13.0722,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "group_duration": {
+            "med": 1202.011,
+            "max": 33714.666,
+            "p(90)": 6714.985419999999,
+            "p(95)": 8582.840259999992,
+            "avg": 2426.3573244859094,
+            "min": 0
+        },
+        "http_req_waiting": {
+            "p(95)": 4360.544354999999,
+            "avg": 1129.13927158893,
+            "min": 0,
+            "med": 587.15975,
+            "max": 26905.7644,
+            "p(90)": 3238.6819100000007
+        },
+        "iteration_duration": {
+            "avg": 18995.223474723167,
+            "min": 5663.7968,
+            "med": 18980.4286,
+            "max": 48823.1108,
+            "p(90)": 26124.34672,
+            "p(95)": 28784.10288
+        },
+        "checks": {
+            "passes": 41902,
+            "fails": 1,
+            "thresholds": {
+                "rate>0.95": false
+            },
+            "value": 0.9999761353602368
+        }
+    }
+}

@@ -17,33 +17,23 @@ export const authMiddleware = async (req, res, next) => {
 
     const token = authHeader.substring(7);
 
-    // Verify with auth service first (source of truth)
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+
+    // Optionally verify with auth service
     try {
       const user = await serviceClient.get('auth', '/api/auth/verify', {}, {
         'Authorization': `Bearer ${token}`
       });
-      req.user = {
-        ...user,
-        id: user.id || user.sub
-      };
-      return next();
+      req.user = user;
     } catch (error) {
-      // If auth service explicitly rejects the token, fail immediately.
-      if (error?.status === 401) {
-        return res.status(401).json({ error: 'Invalid or expired token' });
-      }
-
-      // Fallback to local verification only when auth service is unavailable.
-      try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = {
-          ...decoded,
-          id: decoded.id || decoded.sub,
-          role: decoded.role || 'student'
-        };
-      } catch {
-        return res.status(401).json({ error: 'Invalid or expired token' });
-      }
+      // Fallback to decoded token if service is unavailable
+      req.user = decoded;
     }
 
     next();
