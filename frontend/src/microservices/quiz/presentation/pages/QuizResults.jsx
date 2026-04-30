@@ -13,10 +13,11 @@ import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadius
 import { quizService } from "../../application/quizService";
 import { useQuizStore } from "../../application/quizStore";
 import { careerService } from "../../../career/application/careerService";
+import { UnauthenticatedQuizResults } from "./UnauthenticatedQuizResults";
 
 export function QuizResults() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
   
   // 1. Get State from Store instead of LocalStorage
@@ -24,6 +25,11 @@ export function QuizResults() {
   
   // State for recommended careers
   const [recommendedCareers, setRecommendedCareers] = useState([]);
+
+  // If user is NOT authenticated and quiz is complete, show limited results page
+  if (!isAuthenticated && scores) {
+    return <UnauthenticatedQuizResults />;
+  }
 
   // 2. Fetch results if missing (e.g., on page refresh or viewing from history)
   useEffect(() => {

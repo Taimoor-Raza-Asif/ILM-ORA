@@ -127,28 +127,29 @@ export function UniversityRecommendations() {
   return (
     <div className="min-h-screen bg-muted/30 p-2 sm:p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <Button variant="ghost" onClick={() => window.history.back()} className="mb-4">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
-
         <div className="mb-6 md:mb-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+          <div className="flex items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3 flex-1">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">University Recommendations</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  Top universities in Pakistan & abroad matching your profile
+                  {loadingSentiments && (
+                    <span className="ml-2 inline-flex items-center gap-1 text-primary">
+                      <Brain className="w-4 h-4 animate-pulse" />
+                      Loading AI ratings...
+                    </span>
+                  )}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">University Recommendations</h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Top universities in Pakistan & abroad matching your profile
-                {loadingSentiments && (
-                  <span className="ml-2 inline-flex items-center gap-1 text-primary">
-                    <Brain className="w-4 h-4 animate-pulse" />
-                    Loading AI ratings...
-                  </span>
-                )}
-              </p>
-            </div>
+            <Button variant="ghost" size="sm" onClick={() => window.history.back()} className="self-start sm:self-auto">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
           </div>
         </div>
 
@@ -168,9 +169,7 @@ export function UniversityRecommendations() {
                 <SelectContent>
                   <SelectItem value="all">All Locations</SelectItem>
                   <SelectItem value="Islamabad">Islamabad</SelectItem>
-                  <SelectItem value="Lahore">Lahore</SelectItem>
-                  <SelectItem value="Karachi">Karachi</SelectItem>
-                  <SelectItem value="Cambridge">Cambridge, USA</SelectItem>
+                  <SelectItem value="Rawalpindi">Rawalpindi</SelectItem>
                 </SelectContent>
               </Select>
 

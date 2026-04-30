@@ -10,11 +10,9 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
-    const savedUser = authStorage.getUser();
-    if (savedUser) {
-      setUser(savedUser);
-    }
+    // Clear any stored auth on app startup - user must login/signup each session
+    authStorage.clearAuth();
+    setUser(null);
     setLoading(false);
   }, []);
 
