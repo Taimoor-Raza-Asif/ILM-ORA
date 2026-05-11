@@ -11,6 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "./../../../shared/components/ui/dropdown-menu";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "./../../../shared/components/ui/tooltip";
+import {
   GraduationCap,
   Home,
   ClipboardList,
@@ -23,7 +28,8 @@ import {
   Sun,
   LogOut,
   User as UserIcon,
-  ShieldCheck
+  ShieldCheck,
+  MessageSquare
 } from "lucide-react";
 import { useTheme } from "../../../app/providers/ThemeProvider";
 import { useAuth } from "../../../app/providers/AuthProvider";
@@ -33,13 +39,11 @@ export function Navigation() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Destructure user along with isAuthenticated and logout
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, logout, user } = useAuth();
 
   // Public links visible to unauthenticated users
   const publicLinks = [
-    { name: "Home", path: "/", icon: Home },
     { name: "Contact", path: "/about", icon: Mail },
   ];
 
@@ -51,12 +55,11 @@ export function Navigation() {
     { name: "Quiz", path: "/quiz-intro", icon: ClipboardList, hideForAdmin: true },
     { name: "Universities", path: "/universities", icon: Building2 },
     { name: "Careers", path: "/careers", icon: Briefcase },
-    { name: "Feedback", path: "/feedback", icon: Mail },
+    { name: "Feedback", path: "/feedback", icon: MessageSquare },
     { name: "Contact", path: "/about", icon: Mail, hideForAdmin: true },
     { name: "Console", path: "/admin", icon: ShieldCheck, adminOnly: true },
   ];
 
-  // Determine which links to show based on auth state and role
   const navLinks = isAuthenticated
     ? authenticatedLinks.filter((link) => {
         if (link.adminOnly && !isAdmin) return false;
@@ -65,7 +68,10 @@ export function Navigation() {
       })
     : publicLinks;
 
-  // Helper to generate initials from name (e.g., "Demo User" -> "DU")
+  // Split links into left side (primary) and right side (utilities)
+  const leftNavLinks = navLinks.filter(link => link.name !== "Feedback" && link.name !== "Contact");
+  const rightNavLinks = navLinks.filter(link => link.name === "Feedback" || link.name === "Contact");
+
   const getInitials = (name) => {
     if (!name) return "U";
     return name
@@ -82,26 +88,31 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-card/95">
+    <nav className="bg-card border-b border-border/50 sticky top-0 z-50 backdrop-blur-sm bg-card/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
+        <div className="flex h-14 items-center justify-between relative">
+          
+          {/* Logo (Left) */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-12 h-12  flex items-center justify-center">
-              <img src="/ilm-ora-logo.png" alt="ILM-ORA Logo" className="w-12 h-12" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/ilm-ora-logo.png" alt="ILM-ORA Logo" className="w-10 h-10" />
             </div>
-            <span className="text-2xl mt-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               ILM-ORA
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+          {/* Desktop Primary Navigation Links (Center) */}
+          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+            {leftNavLinks.map((link) => (
               <Link key={link.path} to={link.path}>
                 <Button
                   variant={location.pathname === link.path ? "default" : "ghost"}
-                  className={location.pathname === link.path ? "bg-primary" : ""}
+                  className={`py-1.5 px-3 h-9 ${
+                    location.pathname === link.path 
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                      : "hover:bg-accent"
+                  }`}
                 >
                   <link.icon className="w-4 h-4 mr-2" />
                   {link.name}
@@ -111,74 +122,86 @@ export function Navigation() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+          <div className="flex items-center gap-1.5">
+            {/* Utility Links (Feedback, Contact) */}
+            <div className="hidden md:flex items-center gap-1">
+              {rightNavLinks.map((link) => (
+                <Tooltip key={link.path}>
+                  <TooltipTrigger asChild>
+                    <Link to={link.path}>
+                      <Button variant="ghost" size="icon" className="h-9 w-9 hover:bg-accent">
+                        <link.icon className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{link.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+
+            {/* Theme Toggle */}
+            <Button variant="ghost" size="icon" className="h-9 w-9 hover:bg-accent" onClick={toggleTheme}>
               {theme === "dark" ? (
-                <Sun className="w-5 h-5" />
+                <Sun className="w-4 h-4" />
               ) : (
-                <Moon className="w-5 h-5" />
+                <Moon className="w-4 h-4" />
               )}
             </Button>
 
-            {/* Desktop: Show User Menu and Logout if Authenticated, else Show Login Button */}
+            {/* User Section */}
             {isAuthenticated ? (
               <>
-                <Button 
-                  variant="ghost" 
-                  className="hidden md:flex text-red-600 hover:text-red-600 hover:bg-red-100/10" 
-                  onClick={handleLogout}
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
+                {/* Divider before User */}
+                <div className="hidden md:block w-[1px] h-6 bg-border/50 mx-2" />
+                
                 <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar>
-                      <AvatarImage src="" alt={user?.name || "User"} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
+                  <DropdownMenuTrigger className="hidden md:flex items-center justify-center h-9 w-9 rounded-full border border-border hover:bg-accent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage src={user?.profilePicture || ""} alt={user?.name || "User"} className="object-cover" />
+                      <AvatarFallback className="bg-primary text-primary-foreground text-[10px]">
                         {getInitials(user?.name)}
                       </AvatarFallback>
                     </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                      {user?.name && <p className="font-medium">{user.name}</p>}
-                      {user?.email && (
-                        <p className="w-[200px] truncate text-sm text-muted-foreground">
-                          {user.email}
-                        </p>
-                      )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="flex items-center justify-start gap-2 p-2">
+                      <div className="flex flex-col space-y-1 leading-none">
+                        {user?.name && <p className="font-medium">{user.name}</p>}
+                        {user?.email && (
+                          <p className="w-[200px] truncate text-sm text-muted-foreground">
+                            {user.email}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <DropdownMenuSeparator />
-                  {!isAdmin && (
+                    <DropdownMenuSeparator />
+                    {!isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/dashboard" className="cursor-pointer">
+                          <UserIcon className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem asChild>
-                      <Link to="/dashboard" className="cursor-pointer">
-                        <UserIcon className="mr-2 h-4 w-4" />
-                        Dashboard
+                      <Link to="/settings" className="cursor-pointer">
+                        <ClipboardList className="mr-2 h-4 w-4" />
+                        Settings
                       </Link>
                     </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings" className="cursor-pointer">
-                      <ClipboardList className="mr-2 h-4 w-4" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/50">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
-              <Link to="/auth" className="hidden md:block">
-                <Button className="bg-primary hover:bg-primary/90">Get Started</Button>
+              <Link to="/auth" className="hidden md:block ml-2">
+                <Button className="bg-primary hover:bg-primary/90 h-9 py-1.5 px-4">Get Started</Button>
               </Link>
             )}
 
@@ -186,13 +209,13 @@ export function Navigation() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden h-9 w-9 ml-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5" />
               )}
             </Button>
           </div>
@@ -201,18 +224,19 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-card">
+        <div className="md:hidden border-t border-border/50 bg-card">
           <div className="px-4 py-4 space-y-2">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
+                className="block"
               >
                 <Button
                   variant={location.pathname === link.path ? "default" : "ghost"}
                   className={`w-full justify-start ${
-                    location.pathname === link.path ? "bg-primary" : ""
+                    location.pathname === link.path ? "bg-primary text-primary-foreground" : ""
                   }`}
                 >
                   <link.icon className="w-4 h-4 mr-2" />
@@ -223,15 +247,16 @@ export function Navigation() {
             
             {/* Mobile Auth Buttons */}
             {!isAuthenticated ? (
-              <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full bg-primary hover:bg-primary/90 mt-4">
+              <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="block mt-4">
+                <Button className="w-full bg-primary hover:bg-primary/90">
                   Get Started
                 </Button>
               </Link>
             ) : (
-              <div className="pt-4 border-t border-border mt-4">
+              <div className="pt-4 border-t border-border/50 mt-4">
                 <div className="flex items-center gap-3 px-2 mb-4">
-                   <Avatar>
+                   <Avatar className="h-9 w-9">
+                      <AvatarImage src={user?.profilePicture || ""} alt={user?.name || "User"} className="object-cover" />
                       <AvatarFallback className="bg-primary text-primary-foreground">
                         {getInitials(user?.name)}
                       </AvatarFallback>
@@ -242,7 +267,7 @@ export function Navigation() {
                    </div>
                 </div>
                 {!isAdmin && (
-                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="block">
                     <Button variant="ghost" className="w-full justify-start">
                       <UserIcon className="w-4 h-4 mr-2" />
                       Dashboard
@@ -251,7 +276,7 @@ export function Navigation() {
                 )}
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start text-red-600 hover:text-red-600 hover:bg-red-100/10" 
+                  className="w-full justify-start text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 mt-1" 
                   onClick={() => {
                     handleLogout();
                     setMobileMenuOpen(false);

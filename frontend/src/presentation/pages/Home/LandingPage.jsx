@@ -80,8 +80,8 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="relative">
-              <div className="relative z-10">
+            <div className="relative flex justify-end">
+              <div className="relative z-10 pl-8">
                 <ImageWithFallback
                   src={landingPageImage}
                   alt="Students studying"

@@ -7,8 +7,9 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Card } from "@/shared/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import { GraduationCap, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { GraduationCap, Mail, Lock, User, ArrowLeft, KeyRound } from "lucide-react";
 import { ImageWithFallback } from "@/shared/components/ImageWithFallback";
+import { authAPI } from "@/microservices/auth/infrastructure/api/authAPI";
 
 // export function AuthPage() {
 //   const navigate = useNavigate();
@@ -61,6 +62,40 @@ export function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const auth = useAuth();
+
+  // Forgot password states
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotStep, setForgotStep] = useState(1);
+  const [otpEmail, setOtpEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [newOtpPassword, setNewOtpPassword] = useState('');
+  const [forgotMessage, setForgotMessage] = useState(null);
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setForgotMessage(null);
+    setIsLoading(true);
+    try {
+      if (forgotStep === 1) {
+        await authAPI.forgotPassword(otpEmail);
+        setForgotMessage("OTP sent to your email.");
+        setForgotStep(2);
+      } else {
+        await authAPI.resetPassword({ email: otpEmail, otp: otpCode, newPassword: newOtpPassword });
+        setForgotMessage("Password reset successful. You can now login.");
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setForgotStep(1);
+          setForgotMessage(null);
+        }, 3000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || err.message || "Request failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Dual guard system: ref + timestamp
   const submittingRef = React.useRef(false);
@@ -135,9 +170,9 @@ export function AuthPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="gap-2 text-white hover:bg-white/10"
+            className="gap-2 text-white hover:bg-white/10 hover:translate-x-[-2px] transition-all"
             type="button"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
           >
             <ArrowLeft className="w-4 h-4" />
             Back
@@ -152,8 +187,8 @@ export function AuthPage() {
         </div>
         <div className="relative z-10 flex flex-col justify-center items-center text-white p-12 w-full">
           <div className="max-w-md">
-            <div className="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-8">
-              <GraduationCap className="w-12 h-12" />
+            <div className="w-24 h-24 flex items-center justify-center mb-8">
+              <img src="/ilm-ora-logo.png" alt="ILM-ORA Logo" className="w-full h-full object-contain drop-shadow-2xl" />
             </div>
             <h1 className="text-5xl font-bold mb-6">Welcome to ILM-ORA</h1>
             <p className="text-xl mb-8 text-white/90">
@@ -185,9 +220,9 @@ export function AuthPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="gap-2"
+              className="gap-2 hover:translate-x-[-2px] transition-all"
               type="button"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/")}
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -196,8 +231,8 @@ export function AuthPage() {
 
           <div className="mb-8 lg:hidden text-center">
             <div className="inline-flex items-center gap-2 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
-                <GraduationCap className="w-7 h-7 text-primary-foreground" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src="/ilm-ora-logo.png" alt="ILM-ORA Logo" className="w-10 h-10 object-contain" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 ILM-ORA
@@ -212,8 +247,106 @@ export function AuthPage() {
                 {error}
               </div>
             )}
+            {forgotMessage && (
+              <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm">
+                {forgotMessage}
+              </div>
+            )}
 
-            <Tabs defaultValue="login" className="w-full">
+            {showForgotPassword ? (
+              <div className="space-y-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-bold tracking-tight">Reset Password</h2>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {forgotStep === 1 
+                      ? "Enter your email to receive an OTP." 
+                      : "Enter the OTP sent to your email and your new password."}
+                  </p>
+                </div>
+                
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  {forgotStep === 1 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="forgot-email">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <Input
+                          id="forgot-email"
+                          type="email"
+                          placeholder="you@example.com"
+                          className="pl-10"
+                          required
+                          value={otpEmail}
+                          onChange={(e) => setOtpEmail(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {forgotStep === 2 && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="otp-code">One Time Password (OTP)</Label>
+                        <div className="relative">
+                          <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                          <Input
+                            id="otp-code"
+                            type="text"
+                            placeholder="123456"
+                            className="pl-10"
+                            required
+                            value={otpCode}
+                            onChange={(e) => setOtpCode(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="new-password">New Password</Label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                          <Input
+                            id="new-password"
+                            type="password"
+                            placeholder="••••••••"
+                            className="pl-10"
+                            required
+                            value={newOtpPassword}
+                            onChange={(e) => setNewOtpPassword(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-primary hover:bg-primary/90"
+                    disabled={isLoading}
+                  >
+                    {isLoading 
+                      ? "Please wait..." 
+                      : (forgotStep === 1 ? "Send OTP" : "Reset Password")}
+                  </Button>
+                  
+                  <div className="text-center mt-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowForgotPassword(false);
+                        setForgotStep(1);
+                        setError(null);
+                        setForgotMessage(null);
+                      }}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      Back to Login
+                    </button>
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <>
+                <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-8">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Sign Up</TabsTrigger>
@@ -249,6 +382,19 @@ export function AuthPage() {
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                       />
+                    </div>
+                    <div className="flex justify-end mt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowForgotPassword(true);
+                          setOtpEmail(loginEmail);
+                          setError(null);
+                        }}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Forgot Password?
+                      </button>
                     </div>
                   </div>
                   
@@ -372,16 +518,18 @@ export function AuthPage() {
               </Button>
             </div>
 
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              By signing up, you agree to our{" "}
-              <a href="#" className="text-primary hover:underline">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-primary hover:underline">
-                Privacy Policy
-              </a>
-            </p>
+              <p className="text-center text-sm text-muted-foreground mt-6">
+                By signing up, you agree to our{" "}
+                <a href="#" className="text-primary hover:underline">
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="#" className="text-primary hover:underline">
+                  Privacy Policy
+                </a>
+              </p>
+            </>
+          )}
           </Card>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { AppProviders } from "./providers/AppProviders";
 import { AppRoutes } from "./routes"; // This is your index.jsx
 import { Toaster } from "../presentation/components/common/Toaster";
 import { Navigation } from "../presentation/components/layout/Navigation";
+import { Footer } from "../presentation/components/layout/Footer";
 
 /**
  * A small helper component to render navigation only on non-auth pages
@@ -28,12 +29,14 @@ export default function App() {
           but it's outside the Routes so it stays on every page.
           We also use a helper to hide it on the /auth page.
         */}
-        <ConditionalNavigation />
-        
-        <main className="pt-16"> {/* Add padding-top to offset the sticky nav's height */}
-          <AppRoutes />
-        </main>
-        
+        <div className="flex flex-col min-h-screen">
+          <ConditionalNavigation />
+          
+          <main className="pt-16 flex-1"> {/* Add padding-top to offset the sticky nav's height */}
+            <AppRoutes />
+          </main>
+          <Footer />
+        </div>
         <Toaster />
       </BrowserRouter>
     </AppProviders>

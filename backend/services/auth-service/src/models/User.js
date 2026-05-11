@@ -10,6 +10,10 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  profilePicture: {
+    type: String,
+    default: ""
+  },
   passwordHash: {
     type: String,
     required: true
@@ -17,6 +21,14 @@ const UserSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  preferences: {
+    emailNotifications: { type: Boolean, default: true },
+    scholarshipAlerts: { type: Boolean, default: true },
+    universityUpdates: { type: Boolean, default: false },
+    dataUsageConsent: { type: Boolean, default: false }
+  },
+  resetPasswordOTP: { type: String },
+  resetPasswordExpires: { type: Date }
 });
 export const UserModel = mongoose.model('User', UserSchema);
