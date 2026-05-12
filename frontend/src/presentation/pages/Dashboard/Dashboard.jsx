@@ -145,11 +145,22 @@ export const Dashboard = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            Welcome, {user?.name || 'User'}! 👋
+            {getGreeting()}, {user?.name || 'User'}! 👋
           </h1>
           <p className="text-muted-foreground">
             Track your progress and continue your career discovery journey
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link to="/quiz-intro">
+              <Button size="sm">Start Quiz</Button>
+            </Link>
+            <Link to="/degrees">
+              <Button size="sm" variant="outline">See Degree Matches</Button>
+            </Link>
+            <Link to="/universities">
+              <Button size="sm" variant="outline">Browse Universities</Button>
+            </Link>
+          </div>
         </div>
 
         {/* Progress Overview with Charts */}

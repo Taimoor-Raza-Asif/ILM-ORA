@@ -21,12 +21,15 @@ export function UniversityRecommendations() {
   const [loadingSentiments, setLoadingSentiments] = useState(true);
   const [universities, setUniversities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const ITEMS_PER_PAGE = 10;
+  const MAX_VISIBLE_PAGES = 7;
 
   // Mark university insights as viewed when component mounts
   useEffect(() => {
@@ -47,6 +50,7 @@ export function UniversityRecommendations() {
     const fetchUniversities = async () => {
       try {
         setLoading(true);
+        setLoadError("");
         const response = await fetch(`/api/universities?page=${currentPage}&limit=${ITEMS_PER_PAGE}`);
         if (response.ok) {
           const data = await response.json();
@@ -73,9 +77,14 @@ export function UniversityRecommendations() {
           setTotalPages(data.totalPages || 1);
           setTotalCount(data.totalCount || 0);
           setCurrentPage(data.currentPage || 1);
+        } else {
+          setUniversities([]);
+          setLoadError("Could not load universities right now. Please try again.");
         }
       } catch (error) {
         console.error("Failed to fetch universities:", error);
+        setUniversities([]);
+        setLoadError("Could not load universities right now. Please check your connection and retry.");
       } finally {
         setLoading(false);
         setLoadingSentiments(false);
@@ -83,26 +92,28 @@ export function UniversityRecommendations() {
     };
 
     fetchUniversities();
-  }, [currentPage]);
+  }, [currentPage, retryCount]);
 
   // Effect to fetch sentiments if they weren't in the list
   useEffect(() => {
     if (universities.length === 0) return;
 
     const fetchSentiments = async () => {
+      setLoadingSentiments(true);
       const ratings = {};
       for (const uni of universities) {
         try {
-          const res = await fetch(`/api/reviews/${uni.apiName}/stats`);
+          const res = await fetch(`/api/reviews/${encodeURIComponent(uni.apiName)}/stats`);
           if (res.ok) {
             const data = await res.json();
-            ratings[uni.id] = data.stats?.overallRating || 0;
+            ratings[uni.id] = data.stats?.overall_rating ?? data.stats?.overallRating ?? 0;
           }
         } catch (e) {
           console.error(e);
         }
       }
       setSentimentRatings(ratings);
+      setLoadingSentiments(false);
     };
     fetchSentiments();
   }, [universities]);
@@ -122,6 +133,22 @@ export function UniversityRecommendations() {
       setCurrentPage(newPage);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const getVisiblePages = () => {
+    if (totalPages <= MAX_VISIBLE_PAGES) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const half = Math.floor(MAX_VISIBLE_PAGES / 2);
+    let start = Math.max(1, currentPage - half);
+    let end = Math.min(totalPages, start + MAX_VISIBLE_PAGES - 1);
+
+    if (end - start + 1 < MAX_VISIBLE_PAGES) {
+      start = Math.max(1, end - MAX_VISIBLE_PAGES + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
   return (
@@ -178,10 +205,52 @@ export function UniversityRecommendations() {
         </Card>
 
         <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <p className="text-xs sm:text-sm text-muted-foreground">Showing {filteredUniversities.length} of {totalCount} universit{totalCount !== 1 ? "ies" : "y"}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            Showing {filteredUniversities.length} of {totalCount} universit{totalCount !== 1 ? "ies" : "y"}
+          </p>
         </div>
 
-        <div className="grid gap-6">
+        {loading && (
+          <Card className="border-2">
+            <CardContent className="p-8 text-center">
+              <Loader2 className="w-6 h-6 mx-auto mb-2 animate-spin text-primary" />
+              <p className="font-medium">Loading universities...</p>
+              <p className="text-sm text-muted-foreground mt-1">Please wait while we fetch recommendations.</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {!loading && loadError && (
+          <Card className="border-2 border-red-200 bg-red-50/40">
+            <CardContent className="p-6 text-center">
+              <p className="font-medium text-red-700">{loadError}</p>
+              <Button className="mt-3" variant="outline" onClick={() => setRetryCount(prev => prev + 1)}>
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {!loading && !loadError && filteredUniversities.length === 0 && (
+          <Card className="border-2">
+            <CardContent className="p-8 text-center">
+              <p className="font-medium">No universities match your current filters.</p>
+              <p className="text-sm text-muted-foreground mt-1">Try clearing search text or selecting "All Locations".</p>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => {
+                  setSearchTerm("");
+                  setCityFilter("all");
+                }}
+              >
+                Reset Filters
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {!loading && !loadError && filteredUniversities.length > 0 && <div className="grid gap-6">
           {filteredUniversities.map((university) => {
             const sentiment = sentimentRatings[university.id];
             const hasSentiment = sentiment && sentiment > 0;
@@ -192,7 +261,13 @@ export function UniversityRecommendations() {
                   <div className="lg:w-80 h-64 lg:h-auto relative overflow-hidden">
                     <ImageWithFallback src={university.image} alt={university.name} className="w-full h-full object-cover" />
                     <div className="absolute top-4 right-4 flex gap-2">
-                      <Button size="icon" variant={saved.includes(university.id) ? "default" : "secondary"} className="rounded-full shadow-lg" onClick={() => toggleSave(university.id)}>
+                      <Button
+                        size="icon"
+                        variant={saved.includes(university.id) ? "default" : "secondary"}
+                        className="rounded-full shadow-lg"
+                        onClick={() => toggleSave(university.id)}
+                        aria-label={saved.includes(university.id) ? `Remove ${university.name} from saved` : `Save ${university.name}`}
+                      >
                         <Heart className={`w-5 h-5 ${saved.includes(university.id) ? "fill-current" : ""}`} />
                       </Button>
                     </div>
@@ -280,28 +355,31 @@ export function UniversityRecommendations() {
               </Card>
             );
           })}
-        </div>
+        </div>}
 
         {/* Pagination Controls */}
-        {totalPages > 1 && (
+        {!loading && !loadError && filteredUniversities.length > 0 && totalPages > 1 && (
           <div className="mt-8 flex justify-center items-center gap-2">
             <Button
               variant="outline"
               size="icon"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              aria-label="Go to previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
 
             <div className="flex items-center gap-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              {getVisiblePages().map((page) => (
                 <Button
                   key={page}
                   variant={currentPage === page ? "default" : "outline"}
                   size="sm"
                   onClick={() => handlePageChange(page)}
                   className="w-8 h-8 p-0"
+                  aria-label={`Go to page ${page}`}
+                  aria-current={currentPage === page ? "page" : undefined}
                 >
                   {page}
                 </Button>
@@ -313,6 +391,7 @@ export function UniversityRecommendations() {
               size="icon"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
+              aria-label="Go to next page"
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
