@@ -9,9 +9,9 @@ services:
     environment:
       - PORT=3000
       - NODE_ENV=production
-      - CORS_ORIGIN=http://localhost:3001
-      - JWT_SECRET=ilm-ora-secret-key-change-in-production-2024
-      - AUTH_SERVICE_URL=http://auth-service:3001
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - JWT_SECRET=${JWT_SECRET}
+      - AUTH_SERVICE_URL=http://auth-service:3008
       - QUIZ_SERVICE_URL=http://quiz-service:3002
       - RECOMMENDATION_SERVICE_URL=http://recommendation-service:3003
       - SENTIMENT_SERVICE_URL=http://sentiment-service:3004
@@ -33,22 +33,12 @@ services:
   auth-service:
     build: ./services/auth-service
     ports:
-      - "3001:3001"
+      - "3008:3008"
     environment:
-      - PORT=3001
+      - PORT=3008
       - MONGO_ENABLED=true
-      - MONGO_URI=mongodb://auth-db:27017/auth-db
-      - JWT_SECRET=ilm-ora-secret-key-change-in-production-2024
-    depends_on:
-      - auth-db
-    networks:
-      - ilm-ora-network
-
-  auth-db:
-    image: mongo:6.0
-    restart: always
-    volumes:
-      - auth-db-data:/data/db
+      - MONGO_URI=${AUTH_MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - ilm-ora-network
 
@@ -59,6 +49,8 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
+      - MONGO_URI=${QUIZ_MONGO_URI}
+      - DB_NAME=${QUIZ_DB_NAME:-quiz_db}
     networks:
       - ilm-ora-network
 
@@ -89,21 +81,12 @@ services:
       - "3005:3005"
     environment:
       - PORT=3005
-      - MONGO_URI=mongodb://university-db:27017/ilm-ora-university
+      - MONGO_URI=${UNIVERSITY_MONGO_URI}
       - PYTHON_SENTIMENT_URL=http://python-sentiment-service:5000
     volumes:
       - ./shared:/app/shared:ro
     depends_on:
-      - university-db
       - python-sentiment-service
-    networks:
-      - ilm-ora-network
-
-  university-db:
-    image: mongo:6.0
-    restart: always
-    volumes:
-      - university-db-data:/data/db
     networks:
       - ilm-ora-network
 
@@ -140,7 +123,3 @@ services:
 networks:
   ilm-ora-network:
     driver: bridge
-
-volumes:
-  auth-db-data:
-  university-db-data:
