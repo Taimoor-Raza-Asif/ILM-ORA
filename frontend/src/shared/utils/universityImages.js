@@ -3,42 +3,42 @@
  * Maps university names to their respective images
  */
 
-// Import images from assets
-import airUniversity from '../../assets/images/universities/Air University.jpg';
-import airH11 from '../../assets/images/universities/Air-H11.jpg';
-import alKaram from '../../assets/images/universities/Al Karam.jpg';
-import alKhair from '../../assets/images/universities/Al Khair.jpg';
-import aiou from '../../assets/images/universities/Allama Iqbal Uni.jpg';
-import abasyn from '../../assets/images/universities/Abasyn.png';
-import bahriaE8 from '../../assets/images/universities/Bahria.jpg';
-import bahriaH11 from '../../assets/images/universities/Bahria-H11.jpg';
-import bnu from '../../assets/images/universities/BNU.jpg';
-import comsats from '../../assets/images/universities/Comsats.jpg';
-import cust from '../../assets/images/universities/CUST.jpg';
-import fast from '../../assets/images/universities/FAST.jpg';
-import fjwu from '../../assets/images/universities/FJW.jpg';
-import foundation from '../../assets/images/universities/foundation.png';
-import fuuast from '../../assets/images/universities/FUUAST.jpg';
-import giki from '../../assets/images/universities/GIKI.jpg';
-import iiui from '../../assets/images/universities/IIUI.jpg';
-import ist from '../../assets/images/universities/IST.jpg';
-import miu from '../../assets/images/universities/MIU.jpg';
-import ndu from '../../assets/images/universities/NDU.jpg';
-import northern from '../../assets/images/universities/Northern.jpg';
-import nsu from '../../assets/images/universities/NSU.jpg';
-import numl from '../../assets/images/universities/NUML.jpg';
-import nust from '../../assets/images/universities/NUST.jpg';
-import nutech from '../../assets/images/universities/NUTECH.jpg';
-import pide from '../../assets/images/universities/PIDE.jpg';
-import pieas from '../../assets/images/universities/PIEAS.jpg';
-import qau from '../../assets/images/universities/QAU.jpg';
-import riphah from '../../assets/images/universities/Ripha.jpg';
-import rmu from '../../assets/images/universities/RMU.jpg';
-import sirSyed from '../../assets/images/universities/Sir Syed Case Uni.jpg';
-import stmu from '../../assets/images/universities/STMU.jpg';
-import szabist from '../../assets/images/universities/SZABIST.jpg';
-import szabmu from '../../assets/images/universities/SZABMU.jpg';
-import apcoms from '../../assets/images/universities/apcoms.jpg';
+// Use public folder URLs so deployments don't depend on local untracked assets.
+const airUniversity = '/images/universities/air-university.jpg';
+const airH11 = '/images/universities/air-h11.jpg';
+const alKaram = '/images/universities/al-karam.jpg';
+const alKhair = '/images/universities/al-khair.jpg';
+const aiou = '/images/universities/allama-iqbal-uni.jpg';
+const abasyn = '/images/universities/abasyn.png';
+const bahriaE8 = '/images/universities/bahria.jpg';
+const bahriaH11 = '/images/universities/bahria-h11.jpg';
+const bnu = '/images/universities/bnu.jpg';
+const comsats = '/images/universities/comsats.jpg';
+const cust = '/images/universities/cust.jpg';
+const fast = '/images/universities/fast.jpg';
+const fjwu = '/images/universities/fjw.jpg';
+const foundation = '/images/universities/foundation.png';
+const fuuast = '/images/universities/fuuast.jpg';
+const giki = '/images/universities/giki.jpg';
+const iiui = '/images/universities/iiui.jpg';
+const ist = '/images/universities/ist.jpg';
+const miu = '/images/universities/miu.jpg';
+const ndu = '/images/universities/ndu.jpg';
+const northern = '/images/universities/northern.jpg';
+const nsu = '/images/universities/nsu.jpg';
+const numl = '/images/universities/numl.jpg';
+const nust = '/images/universities/nust.jpg';
+const nutech = '/images/universities/nutech.jpg';
+const pide = '/images/universities/pide.jpg';
+const pieas = '/images/universities/pieas.jpg';
+const qau = '/images/universities/qau.jpg';
+const riphah = '/images/universities/riphah.jpg';
+const rmu = '/images/universities/rmu.jpg';
+const sirSyed = '/images/universities/sir-syed-case-uni.jpg';
+const stmu = '/images/universities/stmu.jpg';
+const szabist = '/images/universities/szabist.jpg';
+const szabmu = '/images/universities/szabmu.jpg';
+const apcoms = '/images/universities/apcoms.jpg';
 
 /**
  * Image mapping object
@@ -215,7 +215,8 @@ export const universityImages = {
  * @returns {string|object} Image URL or imported image
  */
 export const getUniversityImage = (nameOrApiName, fallbackUrl = null) => {
-  if (!nameOrApiName) return fallbackUrl || null;
+  const defaultImage = '/images/universities/default-university.svg';
+  if (!nameOrApiName) return fallbackUrl || defaultImage;
   
   // Try exact match first
   if (universityImages[nameOrApiName]) {
@@ -240,7 +241,7 @@ export const getUniversityImage = (nameOrApiName, fallbackUrl = null) => {
   }
   
   // Return fallback
-  return fallbackUrl || null;
+  return fallbackUrl || defaultImage;
 };
 
 /**
