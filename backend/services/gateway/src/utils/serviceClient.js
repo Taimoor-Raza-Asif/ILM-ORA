@@ -45,11 +45,20 @@ class ServiceClient {
       
       if (error.response) {
         // Service responded with error
+        const d = error.response.data;
+        let fallback = 'Service error';
+        if (typeof d === 'string' && d.trim()) {
+          fallback = d.length > 200 ? `${d.slice(0, 200)}…` : d;
+        } else if (d && typeof d === 'object') {
+          fallback = d.message || d.error || fallback;
+        }
         throw {
           status: error.response.status,
-          message: error.response.data?.message || error.response.data?.error || 'Service error',
+          message: (typeof d === 'object' && d !== null)
+            ? (d.message || d.error || fallback)
+            : fallback,
           service: serviceKey,
-          data: error.response.data
+          data: d
         };
       } else if (error.request) {
         // No response received

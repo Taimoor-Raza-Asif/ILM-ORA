@@ -21,8 +21,19 @@ const app = express();
 
 // Security middleware
 app.use(helmet());
+
+// CORS: set CORS_ORIGIN to one origin, or comma-separated list, e.g.
+// https://www.ilm-ora.tech,https://ilm-ora.tech
+const rawCors = process.env.CORS_ORIGIN?.trim();
+const corsOrigin =
+  !rawCors || rawCors === '*'
+    ? '*'
+    : rawCors.includes(',')
+      ? rawCors.split(',').map((s) => s.trim()).filter(Boolean)
+      : rawCors;
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: corsOrigin,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
