@@ -5,7 +5,7 @@ WORKDIR /app
 # Build from repo root with: docker build -f backend/services/university-service/Dockerfile backend
 COPY services/university-service/package*.json ./
 
-RUN npm ci --production
+RUN npm install --omit=dev
 
 COPY services/university-service/ ./
 COPY shared /shared
