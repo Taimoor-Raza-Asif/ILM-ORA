@@ -1,4 +1,5 @@
 // auth-service/src/index.js
+import './env.js';
 import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/authRoutes.js';

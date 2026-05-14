@@ -92,9 +92,9 @@ def health_check():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 3003))
-    print(f"🚀 Starting Recommendation Service on port {port}")
+    print(f"Starting Recommendation Service on port {port}")
     uvicorn.run(
-        "main:app",  # Changed from "src.main:app"
+        "src.main:app",
         host="0.0.0.0",
         port=port,
         reload=True
