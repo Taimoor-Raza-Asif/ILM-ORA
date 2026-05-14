@@ -67,13 +67,14 @@ export function CareerInsights() {
 
   // Helper function to parse salary string to number
   const parseSalary = (salaryStr) => {
-    const cleaned = salaryStr.replace(/[^0-9]/g, '');
+    if (salaryStr == null || salaryStr === "") return 0;
+    const cleaned = String(salaryStr).replace(/[^0-9]/g, "");
     return parseInt(cleaned, 10) || 0;
   };
 
   // Helper function to categorize job
   const categorizeJob = (jobTitle) => {
-    const title = jobTitle.toLowerCase();
+    const title = (jobTitle ?? "").toLowerCase();
     for (const [key, category] of Object.entries(fieldCategories)) {
       if (key === "all") continue;
       if (category.keywords.some(keyword => title.includes(keyword))) {
@@ -110,15 +111,18 @@ export function CareerInsights() {
 
     // Apply field filter
     if (field !== "all") {
-      filtered = filtered.filter(career => categorizeJob(career.job_title) === field);
+      filtered = filtered.filter(career =>
+        categorizeJob(career.job_title || career.title) === field
+      );
     }
 
     // Apply search filter
     if (query.trim()) {
       const lowerQuery = query.toLowerCase();
-      filtered = filtered.filter(career => 
-        career.job_title.toLowerCase().includes(lowerQuery)
-      );
+      filtered = filtered.filter(career => {
+        const title = (career.job_title || career.title || "").toLowerCase();
+        return title.includes(lowerQuery);
+      });
     }
 
     setFilteredCareers(filtered);
@@ -191,8 +195,9 @@ export function CareerInsights() {
   filteredCareers.forEach(career => {
     if (career.benefits) {
       Object.keys(benefitsAgg).forEach(key => {
-        if (career.benefits[key]) {
-          benefitsAgg[key] += parseFloat(career.benefits[key].replace('%', '') || 0);
+        const raw = career.benefits[key];
+        if (raw != null && raw !== "") {
+          benefitsAgg[key] += parseFloat(String(raw).replace("%", "") || 0);
         }
       });
       benefitsCount++;
@@ -492,7 +497,7 @@ export function CareerInsights() {
               <CardContent className="p-6 flex flex-col flex-1">
                 <div className="mb-4">
                   <h3 className="text-lg font-bold mb-2 leading-tight min-h-[3.5rem] line-clamp-2">
-                    {career.job_title}
+                    {career.job_title || career.title}
                   </h3>
                   <Badge variant="outline" className="text-xs">
                     {career.median_salary}
@@ -621,7 +626,7 @@ export function CareerInsights() {
             {selectedCareer && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl">{selectedCareer.job_title}</DialogTitle>
+                  <DialogTitle className="text-2xl">{selectedCareer.job_title || selectedCareer.title}</DialogTitle>
                   <DialogDescription>{selectedCareer.summary}</DialogDescription>
                 </DialogHeader>
 

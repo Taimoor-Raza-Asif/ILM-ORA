@@ -1,6 +1,19 @@
 import axios from 'axios';
 import { serviceRegistry } from './serviceRegistry.js';
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Render cold starts often return 502/503 until the container is ready. */
+function isRetriableUpstreamError(error) {
+  if (error.response) {
+    const s = error.response.status;
+    return s === 502 || s === 503 || s === 504;
+  }
+  if (error.request) return true;
+  const code = error.code;
+  return code === 'ECONNABORTED' || code === 'ECONNRESET' || code === 'ETIMEDOUT';
+}
+
 /**
  * HTTP Client for inter-service communication
  * Provides methods for making requests to other microservices
@@ -9,6 +22,7 @@ class ServiceClient {
   constructor() {
     // Render free tier cold starts can exceed 30s; gateway → service calls need a longer budget.
     this.timeout = 120000; // 120 seconds
+    this.maxRetries = 3;
   }
 
   /**
@@ -27,56 +41,69 @@ class ServiceClient {
     // Use custom timeout if provided, otherwise use default
     const requestTimeout = timeout !== undefined ? timeout : this.timeout;
 
-    try {
-      const response = await axios({
-        method,
-        url,
-        data,
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers
-        },
-        timeout: requestTimeout
-      });
+    const axiosConfig = {
+      method,
+      url,
+      data,
+      params,
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      },
+      timeout: requestTimeout
+    };
 
-      return response.data;
-    } catch (error) {
-      console.error(`Service communication error [${serviceKey}]:`, error.message);
-      
-      if (error.response) {
-        // Service responded with error
-        const d = error.response.data;
-        let fallback = 'Service error';
-        if (typeof d === 'string' && d.trim()) {
-          fallback = d.length > 200 ? `${d.slice(0, 200)}…` : d;
-        } else if (d && typeof d === 'object') {
-          fallback = d.message || d.error || fallback;
+    let lastError;
+    for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+      try {
+        const response = await axios(axiosConfig);
+        return response.data;
+      } catch (error) {
+        lastError = error;
+        const retriable = isRetriableUpstreamError(error);
+        if (!retriable || attempt === this.maxRetries) {
+          break;
         }
-        throw {
-          status: error.response.status,
-          message: (typeof d === 'object' && d !== null)
-            ? (d.message || d.error || fallback)
-            : fallback,
-          service: serviceKey,
-          data: d
-        };
-      } else if (error.request) {
-        // No response received
-        throw {
-          status: 503,
-          message: `Service '${serviceKey}' is unavailable`,
-          service: serviceKey
-        };
-      } else {
-        // Request setup error
-        throw {
-          status: 500,
-          message: error.message,
-          service: serviceKey
-        };
+        const waitMs = 1500 * (attempt + 1);
+        console.warn(
+          `[gateway→${serviceKey}] transient error (${error.message}), attempt ${attempt + 2}/${this.maxRetries + 1} after ${waitMs}ms`
+        );
+        await sleep(waitMs);
       }
     }
+
+    const error = lastError;
+    console.error(`Service communication error [${serviceKey}]:`, error.message);
+
+    if (error.response) {
+      const d = error.response.data;
+      let fallback = 'Service error';
+      if (typeof d === 'string' && d.trim()) {
+        fallback = d.length > 200 ? `${d.slice(0, 200)}…` : d;
+      } else if (d && typeof d === 'object') {
+        fallback = d.message || d.error || fallback;
+      }
+      throw {
+        status: error.response.status,
+        message: (typeof d === 'object' && d !== null)
+          ? (d.message || d.error || fallback)
+          : fallback,
+        service: serviceKey,
+        data: d
+      };
+    }
+    if (error.request) {
+      throw {
+        status: 503,
+        message: `Service '${serviceKey}' is unavailable`,
+        service: serviceKey
+      };
+    }
+    throw {
+      status: 500,
+      message: error.message,
+      service: serviceKey
+    };
   }
 
   /**

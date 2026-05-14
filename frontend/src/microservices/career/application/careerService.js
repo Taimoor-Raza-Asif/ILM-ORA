@@ -1,5 +1,31 @@
 import { careerAPI } from "../infrastructure/api/careerAPI";
 import { mockCareers } from "../infrastructure/data/mockCareers";
+
+/** CareerInsights expects PayScale-shaped rows; mockCareers uses a different schema. */
+function mockCareersForInsights() {
+  return mockCareers.map((m) => {
+    const min = m.salary?.min ?? 0;
+    const max = m.salary?.max ?? 0;
+    const mid = Math.round((min + max) / 2);
+    return {
+      id: m.id,
+      job_title: m.title,
+      average_salary: `PKR ${mid.toLocaleString("en-PK")}`,
+      median_salary: `PKR ${mid.toLocaleString("en-PK")}`,
+      salary_period: "Annual",
+      summary: m.description,
+      url: "https://www.payscale.com/",
+      gender: { Male: "50%", Female: "50%" },
+      benefits: { Medical: "55%", Dental: "35%", Vision: "25%", None: "10%" },
+      experience_levels: {
+        Entry: "▲ 4%",
+        Mid: "▲ 9%",
+        Senior: "▲ 14%"
+      }
+    };
+  });
+}
+
 export const careerService = {
   /**
    * Get all careers
@@ -10,7 +36,7 @@ export const careerService = {
       return response.data;
     } catch (error) {
       console.error("Failed to fetch careers:", error);
-      return mockCareers;
+      return { careers: mockCareersForInsights() };
     }
   },
   /**
@@ -56,7 +82,8 @@ export const careerService = {
   async getHighGrowthCareers() {
     try {
       const all = await this.getAll();
-      return all.filter(c => c.growth > 15).sort((a, b) => b.growth - a.growth);
+      const list = Array.isArray(all) ? all : (all?.careers ?? []);
+      return list.filter(c => c.growth > 15).sort((a, b) => b.growth - a.growth);
     } catch (error) {
       console.error("Failed to fetch high-growth careers:", error);
       return [];
@@ -68,7 +95,8 @@ export const careerService = {
   async getByIndustry(industry) {
     try {
       const all = await this.getAll();
-      return all.filter(c => c.industry === industry);
+      const list = Array.isArray(all) ? all : (all?.careers ?? []);
+      return list.filter(c => c.industry === industry);
     } catch (error) {
       console.error("Failed to fetch careers by industry:", error);
       return [];
