@@ -7,7 +7,8 @@ import { serviceRegistry } from './serviceRegistry.js';
  */
 class ServiceClient {
   constructor() {
-    this.timeout = 30000; // 30 seconds
+    // Render free tier cold starts can exceed 30s; gateway → service calls need a longer budget.
+    this.timeout = 120000; // 120 seconds
   }
 
   /**
