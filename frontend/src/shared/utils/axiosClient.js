@@ -3,13 +3,32 @@ import axios from "axios";
 
 // Vite provides import.meta.env typings by default; no need to redeclare them
 
+/**
+ * Prefer VITE_API_URL when set (any environment).
+ * On production builds served from ilm-ora.tech, call the Render gateway directly so
+ * requests skip the Vercel → Render rewrite (often surfaces as 502 on cold starts).
+ */
+function resolveApiBaseURL() {
+  const fromEnv = import.meta.env.VITE_API_URL?.trim();
+  if (fromEnv) return fromEnv;
+
+  if (typeof window !== "undefined" && import.meta.env.PROD) {
+    const host = window.location.hostname;
+    if (host === "ilm-ora.tech" || host === "www.ilm-ora.tech") {
+      return "https://ilm-ora-gateway.onrender.com/api";
+    }
+  }
+
+  return "/api";
+}
+
 export const axiosClient = axios.create({
-  // Use Vite proxy during development; fallback to explicit API URL
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL: resolveApiBaseURL(),
   headers: {
     "Content-Type": "application/json"
   },
-  timeout: 30000 // 30 seconds - increased for ML model predictions
+  // Match gateway→service budget; Render free tier cold starts can exceed 30s.
+  timeout: 120000
 });
 
 // Request interceptor
