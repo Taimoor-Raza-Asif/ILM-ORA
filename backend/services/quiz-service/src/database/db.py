@@ -13,39 +13,58 @@ client = None
 db = None
 
 def connect_db():
-    """Initialize MongoDB connection"""
+    """Initialize MongoDB connection. Does not raise: service stays up for /health when Mongo is down."""
     global client, db
+    if client is not None and db is not None:
+        return db
     try:
-        client = MongoClient(MONGO_URI)
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
         db = client[DB_NAME]
-        # Test connection
         client.admin.command('ping')
-        print(f"✅ Connected to MongoDB: {DB_NAME}")
-        
-        # Create indexes for better performance
+        print(f"Connected to MongoDB: {DB_NAME}")
+
         db.quiz_sessions.create_index("session_id", unique=True)
         db.quiz_sessions.create_index("user_id")
         db.quiz_sessions.create_index([("user_id", 1), ("created_at", -1)])
-        
+
         db.quiz_results.create_index("session_id", unique=True)
         db.quiz_results.create_index("user_id")
         db.quiz_results.create_index([("user_id", 1), ("completed_at", -1)])
-        
+
         return db
     except Exception as e:
-        print(f"❌ Failed to connect to MongoDB: {e}")
-        raise e
+        print(f"WARNING: MongoDB unavailable for quiz service: {e}")
+        print("  Start MongoDB (e.g. mongod) or set MONGO_URI in quiz-service .env")
+        if client:
+            try:
+                client.close()
+            except Exception:
+                pass
+        client = None
+        db = None
+        return None
+
+
+def is_database_available():
+    return db is not None
+
 
 def get_db():
-    """Get database instance"""
+    """Get database instance (may be None if Mongo is unreachable)."""
     global db
     if db is None:
         connect_db()
     return db
 
+
 def close_db():
     """Close MongoDB connection"""
-    global client
+    global client, db
     if client:
-        client.close()
-        print("✅ MongoDB connection closed")
+        try:
+            client.close()
+        except Exception:
+            pass
+        print("MongoDB connection closed")
+    client = None
+    db = None

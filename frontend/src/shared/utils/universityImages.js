@@ -40,6 +40,11 @@ const szabist = '/images/universities/szabist.jpg';
 const szabmu = '/images/universities/szabmu.jpg';
 const apcoms = '/images/universities/apcoms.jpg';
 
+/** Set VITE_UNIVERSITY_LOCAL_IMAGES=true only when JPG/PNG files exist under public/images/universities/. */
+const useLocalMappedImages =
+  typeof import.meta !== 'undefined' &&
+  import.meta.env?.VITE_UNIVERSITY_LOCAL_IMAGES === 'true';
+
 /**
  * Image mapping object
  * Key: University apiName or name (normalized)
@@ -217,30 +222,32 @@ export const universityImages = {
 export const getUniversityImage = (nameOrApiName, fallbackUrl = null) => {
   const defaultImage = '/images/universities/default-university.svg';
   if (!nameOrApiName) return fallbackUrl || defaultImage;
-  
+
+  let candidate = null;
   // Try exact match first
   if (universityImages[nameOrApiName]) {
-    return universityImages[nameOrApiName];
+    candidate = universityImages[nameOrApiName];
+  } else {
+    const lowerName = nameOrApiName.toLowerCase().trim();
+    if (universityImages[lowerName]) {
+      candidate = universityImages[lowerName];
+    } else {
+      const normalized = nameOrApiName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+      if (universityImages[normalized]) {
+        candidate = universityImages[normalized];
+      }
+    }
   }
-  
-  // Try lowercase match
-  const lowerName = nameOrApiName.toLowerCase().trim();
-  if (universityImages[lowerName]) {
-    return universityImages[lowerName];
+
+  if (candidate) {
+    if (useLocalMappedImages) return candidate;
+    return getExternalUniversityImage(nameOrApiName);
   }
-  
-  // Try normalized match (remove special characters, replace spaces with hyphens)
-  const normalized = nameOrApiName
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .trim();
-  
-  if (universityImages[normalized]) {
-    return universityImages[normalized];
-  }
-  
-  // Return fallback
+
   return fallbackUrl || defaultImage;
 };
 

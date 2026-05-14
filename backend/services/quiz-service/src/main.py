@@ -7,12 +7,10 @@ from .database import connect_db, close_db
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    # Startup
-    print("🚀 Starting Quiz Service...")
+    print("Starting Quiz Service...")
     connect_db()
     yield
-    # Shutdown
-    print("🛑 Shutting down Quiz Service...")
+    print("Shutting down Quiz Service...")
     close_db()
 
 app = FastAPI(
@@ -35,9 +33,11 @@ app.include_router(quiz_Routes.router)
 
 @app.get("/health")
 def health_check():
+    from .database.db import is_database_available
     return {
-        "status": "ok", 
+        "status": "ok",
         "service": "quiz-service",
         "version": "2.0.0",
+        "mongodb": is_database_available(),
         "features": ["persistent_storage", "back_navigation", "resume_session"]
     }

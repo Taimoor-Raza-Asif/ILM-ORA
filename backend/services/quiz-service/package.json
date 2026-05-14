@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "uvicorn src.main:app --reload --port 3002",
-		"start": "uvicorn src.main:app --port 3002"
+		"dev": "uvicorn src.main:app --reload --host 0.0.0.0 --port 3002",
+		"start": "uvicorn src.main:app --host 0.0.0.0 --port 3002"
 	}
 }
