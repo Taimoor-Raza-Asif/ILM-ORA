@@ -1,7 +1,10 @@
 // ==================== PYTHON AI SERVICE INTEGRATION ====================
 // This service calls the Python Flask API to use the trained AI model
 
-const PYTHON_SERVICE_URL = 'http://localhost:5000'; // Python Flask AI service
+const PYTHON_SERVICE_URL =
+  process.env.PYTHON_SENTIMENT_URL ||
+  process.env.PYTHON_SERVICE_URL ||
+  'http://localhost:5000';
 
 // Factor mapping for normalization
 const FACTOR_MAP = {
@@ -16,9 +19,6 @@ const FACTOR_MAP = {
     placements: 'Placements',
     career: 'Placements',
     jobs: 'Placements',
-    'job support': 'Job Support',
-    alumni: 'Job Support',
-    events: 'Events',
 };
 
 /**
@@ -183,4 +183,5 @@ export {
     isModelReady,
     getModelStatus,
     normalizeFactor,
+    PYTHON_SERVICE_URL,
 };

@@ -11,4 +11,4 @@ COPY src/ ./src/
 COPY Gamified_quiz_questions.json .
 
 # Run from the root folder so python can find 'src'
-CMD sh -c "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-3002} --reload"
+CMD sh -c "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-3002}"

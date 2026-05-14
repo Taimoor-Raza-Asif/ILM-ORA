@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Star, ArrowLeft, Loader2 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3005';
 
 export function SentimentDashboard() {
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ export function SentimentDashboard() {
       }
 
       // 2. Send to your AI sentiment service
-      const analysis = await fetch(`${API_BASE}/sentiment/analyze`, {
+      const analysis = await fetch(`${API_BASE}/api/sentiment/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

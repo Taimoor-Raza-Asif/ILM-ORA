@@ -23,4 +23,4 @@ EXPOSE 3003
 
 # Run the app
 # Using sh -c to allow variable expansion for PORT
-CMD sh -c "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-3003} --reload"
+CMD sh -c "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-3003}"

@@ -7,52 +7,29 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import numpy as np
 from functools import lru_cache
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
 # Model configuration
-MODEL_NAME = "AbdullahGhani/NewFYPmodel_univerity"  # Your Hugging Face model
+MODEL_NAME = "AbdullahGhani/Unidatamodel"  # Your Hugging Face model
 
 # Load model and tokenizer
 print("Loading model from Hugging Face...")
 try:
-    # Check for GPU availability
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-    
-    # Use HF_TOKEN from environment if available
-    hf_token = os.getenv('HF_TOKEN')
-    
-    # Load the base tokenizer to avoid the corrupted config from the Kaggle upload
-    # The vocabulary is identical, so this works perfectly.
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v3-base", use_fast=False)
-    
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModelForSequenceClassification.from_pretrained(
         MODEL_NAME,
         num_labels=1,
-        problem_type="regression",
-        token=hf_token
+        problem_type="regression"
     )
-    model.to(device)
-    model.float()  # Force fp32 to avoid dtype mismatch
     model.eval()
-    
-    # Set to inference mode for better performance
-    if hasattr(torch, 'inference_mode'):
-        torch.set_grad_enabled(False)
-    
     print("✓ Model loaded successfully!")
 except Exception as e:
     print(f"Error loading model: {e}")
     print("Please ensure the model files are not corrupted")
     model = None
     tokenizer = None
-    device = None
 
 # Factor mapping
 FACTOR_MAP = {
@@ -67,10 +44,6 @@ FACTOR_MAP = {
     'placements': 'Placements',
     'career': 'Placements',
     'jobs': 'Placements',
-    'job support': 'Job Support',
-    'alumni': 'Job Support',
-    'alumni job': 'Job Support',
-    'events': 'Events',
 }
 
 def normalize_factor(factor):
@@ -84,12 +57,7 @@ def normalize_factor(factor):
         'management': 'Management',
         'sports': 'Sports',
         'hostels': 'Hostels',
-        'hostel': 'Hostels',
-        'resources': 'Resources',
-        'job support': 'Job Support',
-        'job_support': 'Job Support',
-        'alumni': 'Job Support',
-        'events': 'Events',
+        'resources': 'Resources'
     }
     return factor_map.get(factor.lower(), 'Overall')
 
@@ -109,10 +77,6 @@ def predict_rating(review_text, factor, university, city):
         truncation=True,
         max_length=256
     )
-    
-    # Move inputs to device
-    if device:
-        inputs = {k: v.to(device) for k, v in inputs.items()}
     
     # Predict
     with torch.no_grad():
@@ -152,13 +116,11 @@ def predict():
         })
         
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/predict/batch', methods=['POST'])
 def predict_batch():
-    """Predict ratings for multiple reviews (batch processing)"""
+    """Predict ratings for multiple reviews"""
     try:
         data = request.json
         reviews = data.get('reviews', [])
@@ -166,44 +128,15 @@ def predict_batch():
         if not reviews:
             return jsonify({'error': 'reviews array is required'}), 400
         
-        if model is None or tokenizer is None:
-            raise Exception("Model not loaded")
-        
-        # Format all inputs
-        input_texts = []
+        predictions = []
         for review in reviews:
-            factor_norm = normalize_factor(review.get('factor', 'General'))
-            university = review.get('university', '')
-            city = review.get('city', '')
-            review_text = review.get('review_text', '')
-            input_text = f"[{factor_norm}] ({university}, {city}): {review_text}"
-            input_texts.append(input_text)
-        
-        # Batch tokenize all reviews at once
-        inputs = tokenizer(
-            input_texts,
-            return_tensors="pt",
-            truncation=True,
-            max_length=256,
-            padding=True
-        )
-        
-        # Move inputs to device (GPU if available)
-        if device:
-            inputs = {k: v.to(device) for k, v in inputs.items()}
-        
-        # Batch predict all reviews at once
-        with torch.no_grad():
-            outputs = model(**inputs)
-            predictions_raw = outputs.logits.squeeze(-1).cpu().tolist()
-        
-        # Handle single prediction (not a list)
-        if not isinstance(predictions_raw, list):
-            predictions_raw = [predictions_raw]
-        
-        # Clip to 1-5 range and round
-        predictions = [max(1.0, min(5.0, pred)) for pred in predictions_raw]
-        predictions = [round(pred, 2) for pred in predictions]
+            rating = predict_rating(
+                review.get('review_text', ''),
+                review.get('factor', 'General'),
+                review.get('university', ''),
+                review.get('city', '')
+            )
+            predictions.append(rating)
         
         # Calculate statistics
         factor_groups = {}
@@ -214,7 +147,7 @@ def predict_batch():
             factor_groups[factor].append(predictions[i])
         
         # Rating breakdown
-        ordered_factors = ['Overall', 'Faculty', 'Campus', 'Labs', 'Cafeteria', 'Management', 'Sports', 'Hostels', 'Resources', 'Job Support', 'Events']
+        ordered_factors = ['Overall', 'Faculty', 'Campus', 'Labs', 'Cafeteria', 'Management', 'Sports', 'Hostels', 'Resources']
         rating_breakdown = {}
         for factor in ordered_factors:
             if factor in factor_groups:
@@ -249,15 +182,14 @@ def predict_batch():
         })
         
     except Exception as e:
-        import traceback
-        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
+    port = int(os.getenv('PORT', '5000'))
     print("\n" + "="*60)
     print("🚀 University Sentiment Service (Python)")
     print("="*60)
-    print("⚠️  Running on http://localhost:5000")
+    print(f"⚠️  Running on http://0.0.0.0:{port}")
     print("    (Node.js backend uses port 3005)")
     print("="*60)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_DEBUG', 'false').lower() == 'true')
