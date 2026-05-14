@@ -185,10 +185,11 @@ def predict_batch():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
+    port = int(os.getenv('PORT', '5000'))
     print("\n" + "="*60)
     print("🚀 University Sentiment Service (Python)")
     print("="*60)
-    print("⚠️  Running on http://localhost:5000")
+    print(f"⚠️  Running on http://0.0.0.0:{port}")
     print("    (Node.js backend uses port 3005)")
     print("="*60)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_DEBUG', 'false').lower() == 'true')

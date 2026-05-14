@@ -1,0 +1,156 @@
+# Render Blueprint — ILM-ORA backend (gateway + microservices).
+# https://render.com/docs/infrastructure-as-code
+#
+# After push: Dashboard → New → Blueprint → Connect this repo → apply `render.yaml`.
+# You will be prompted for MongoDB URIs and CORS (see env vars with sync: false).
+# First deploy of ilm-ora-python-sentiment can take a long time (ML image) and may OOM on free RAM.
+
+services:
+  - type: web
+    name: ilm-ora-python-sentiment
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/university-service/scripts
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: HF_TOKEN
+        sync: false
+
+  - type: web
+    name: ilm-ora-auth
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/auth-service
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MONGO_ENABLED
+        value: "true"
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+
+  - type: web
+    name: ilm-ora-quiz
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/quiz-service
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: DB_NAME
+        value: quiz_db
+
+  - type: web
+    name: ilm-ora-recommendation
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/recommendation-service
+    dockerfilePath: ./Dockerfile
+
+  - type: web
+    name: ilm-ora-sentiment
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/sentiment-service
+    dockerfilePath: ./Dockerfile
+
+  - type: web
+    name: ilm-ora-university
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    dockerfilePath: ./backend/services/university-service/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: PYTHON_SENTIMENT_URL
+        fromService:
+          name: ilm-ora-python-sentiment
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+
+  - type: web
+    name: ilm-ora-career
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/career-service
+    dockerfilePath: ./Dockerfile
+
+  - type: web
+    name: ilm-ora-admin
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/admin-service
+    dockerfilePath: ./Dockerfile
+
+  - type: web
+    name: ilm-ora-gateway
+    runtime: docker
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    rootDir: backend/services/gateway
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+      - key: JWT_SECRET
+        fromService:
+          name: ilm-ora-auth
+          type: web
+          envVarKey: JWT_SECRET
+      - key: AUTH_SERVICE_URL
+        fromService:
+          name: ilm-ora-auth
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: QUIZ_SERVICE_URL
+        fromService:
+          name: ilm-ora-quiz
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: RECOMMENDATION_SERVICE_URL
+        fromService:
+          name: ilm-ora-recommendation
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: SENTIMENT_SERVICE_URL
+        fromService:
+          name: ilm-ora-sentiment
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: UNIVERSITY_SERVICE_URL
+        fromService:
+          name: ilm-ora-university
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: CAREER_SERVICE_URL
+        fromService:
+          name: ilm-ora-career
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: ADMIN_SERVICE_URL
+        fromService:
+          name: ilm-ora-admin
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL

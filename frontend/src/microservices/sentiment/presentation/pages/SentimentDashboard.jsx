@@ -43,7 +43,7 @@ export function SentimentDashboard() {
       }
 
       // 2. Send to your AI sentiment service
-      const analysis = await fetch(`${API_BASE}/sentiment/analyze`, {
+      const analysis = await fetch(`${API_BASE}/api/sentiment/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

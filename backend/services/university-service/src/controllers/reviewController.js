@@ -1,6 +1,42 @@
 
 import Review from '../models/Review.js';
-import { predictSingle, predictBatch } from '../services/sentimentService.js'; // Fixed: import predictBatch
+import { University } from '../models/University.js';
+import {
+  predictSingle,
+  predictBatch,
+  PYTHON_SERVICE_URL
+} from '../services/sentimentService.js';
+
+const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+async function resolveUniversityName(university) {
+    const sanitizedName = escapeRegExp(university).replace(/[\s\-]+/g, '[\\s\\-]+');
+    const exactRegex = new RegExp(`^${sanitizedName}$`, 'i');
+    const startsWithRegex = new RegExp(`^${sanitizedName}(\\s*,.*)?$`, 'i');
+
+    const exactCount = await Review.countDocuments({
+        university: { $regex: exactRegex },
+        isApproved: true
+    });
+
+    if (exactCount > 0) {
+        return { requestedUniversity: university, resolvedUniversity: university };
+    }
+
+    // Fallback: map short names like "Air University" to "Air University, Islamabad".
+    const candidates = await Review.aggregate([
+        { $match: { university: { $regex: startsWithRegex }, isApproved: true } },
+        { $group: { _id: '$university', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 1 }
+    ]);
+
+    if (candidates.length > 0) {
+        return { requestedUniversity: university, resolvedUniversity: candidates[0]._id };
+    }
+
+    return { requestedUniversity: university, resolvedUniversity: university };
+}
 
 /**
  * Create a new review
@@ -76,6 +112,7 @@ export const createReview = async (req, res) => {
 export const getReviewsByUniversity = async (req, res) => {
     try {
         const { university } = req.params;
+        const { resolvedUniversity } = await resolveUniversityName(university);
         const {
             page = 1,
             limit = 10,
@@ -88,7 +125,7 @@ export const getReviewsByUniversity = async (req, res) => {
         const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10)));
 
         // Get reviews using static method
-        const rawReviews = await Review.getByUniversity(university, {
+        const rawReviews = await Review.getByUniversity(resolvedUniversity, {
             page: pageNum,
             limit: limitNum,
             factor,
@@ -100,14 +137,40 @@ export const getReviewsByUniversity = async (req, res) => {
 
         // Only run AI prediction if there are reviews
         if (rawReviews.length > 0) {
-            const ratings = await predictBatch(
-                rawReviews.map(r => ({
-                    review_text: r.reviewText || r.review_text || '',
-                    factor: r.factor || 'General',
-                    university: r.university || university,
-                    city: r.city || 'Pakistan'
-                }))
-            );
+            // Check for cached predictions first
+            const sanitizedName = escapeRegExp(resolvedUniversity).replace(/[\s\-]+/g, '[\\s\\-]+');
+
+            const universityDoc = await University.findOne({
+                $or: [
+                    { name: { $regex: new RegExp(`^${sanitizedName}$`, 'i') } },
+                    { apiName: { $regex: new RegExp(`^${sanitizedName}$`, 'i') } }
+                ]
+            });
+
+            // Check if cache is valid (less than 24 hours old)
+            const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
+            const now = new Date();
+            const cacheIsValid = universityDoc?.cachedSentiment?.lastAnalyzed &&
+                (now - new Date(universityDoc.cachedSentiment.lastAnalyzed)) < CACHE_DURATION_MS &&
+                universityDoc.cachedSentiment.predictions?.length > 0;
+
+            let ratings;
+            if (cacheIsValid) {
+                // Use cached predictions (assumes same sort order as when cached)
+                console.log(`[REVIEWS] ✅ Using cached predictions for ${university}`);
+                ratings = universityDoc.cachedSentiment.predictions;
+            } else {
+                // Compute fresh predictions
+                console.log(`[REVIEWS] 🔄 Computing fresh predictions for ${university}`);
+                ratings = await predictBatch(
+                    rawReviews.map(r => ({
+                        review_text: r.reviewText || r.review_text || '',
+                        factor: r.factor || 'General',
+                        university: r.university || resolvedUniversity,
+                        city: r.city || 'Pakistan'
+                    }))
+                );
+            }
 
             reviews = rawReviews.map((review, i) => {
                 let cleanText = (review.reviewText || review.review_text || '').trim();
@@ -128,7 +191,7 @@ export const getReviewsByUniversity = async (req, res) => {
         }
 
         // Pagination count
-        const query = { university, isApproved: true };
+        const query = { university: resolvedUniversity, isApproved: true };
         if (factor && factor !== 'all') query.factor = factor;
         const totalCount = await Review.countDocuments(query);
 
@@ -155,16 +218,15 @@ export const getReviewsByUniversity = async (req, res) => {
 export const getReviewStats = async (req, res) => {
     try {
         const { university } = req.params;
+        const { requestedUniversity, resolvedUniversity } = await resolveUniversityName(university);
 
-        console.log(`[STATS] Request for university: "${university}"`);
+        console.log(`[STATS] Request for university: "${requestedUniversity}"`);
+        if (requestedUniversity !== resolvedUniversity) {
+            console.log(`[STATS] Resolved university "${requestedUniversity}" -> "${resolvedUniversity}"`);
+        }
 
         // Escape special regex characters (like brackets) and allow flexible matching for hyphens/spaces
-        const escapeRegExp = (string) => {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        };
-
-        // Replace spaces and hyphens with a regex pattern that matches either
-        const sanitizedName = escapeRegExp(university).replace(/[\s\-]+/g, '[\\s\\-]+');
+        const sanitizedName = escapeRegExp(resolvedUniversity).replace(/[\s\-]+/g, '[\\s\\-]+');
 
         console.log(`[STATS] Using regex: ^${sanitizedName}$`);
 
@@ -174,6 +236,36 @@ export const getReviewStats = async (req, res) => {
         };
 
         const totalCount = await Review.countDocuments(query);
+
+        // Check if we have cached sentiment analysis
+        const universityDoc = await University.findOne({
+            $or: [
+                { name: { $regex: new RegExp(`^${sanitizedName}$`, 'i') } },
+                { apiName: { $regex: new RegExp(`^${sanitizedName}$`, 'i') } }
+            ]
+        });
+
+        // Check if cache is valid (less than 24 hours old and review count matches)
+        const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+        const now = new Date();
+        const cacheIsValid = universityDoc?.cachedSentiment?.lastAnalyzed &&
+            (now - new Date(universityDoc.cachedSentiment.lastAnalyzed)) < CACHE_DURATION_MS &&
+            universityDoc.cachedSentiment.totalReviews === totalCount;
+
+        if (cacheIsValid) {
+            console.log(`[STATS] ✅ Using cached sentiment analysis (age: ${Math.round((now - new Date(universityDoc.cachedSentiment.lastAnalyzed)) / 1000 / 60)} minutes)`);
+            return res.json({
+                success: true,
+                university: resolvedUniversity,
+                cached: true,
+                stats: {
+                    overall_rating: universityDoc.cachedSentiment.overallRating || 0,
+                    total_reviews: universityDoc.cachedSentiment.totalReviews || totalCount,
+                    rating_breakdown: universityDoc.cachedSentiment.ratingBreakdown || {},
+                    review_distribution: universityDoc.cachedSentiment.reviewDistribution || {}
+                }
+            });
+        }
 
         // Limit to latest 50 reviews for AI analysis to prevent timeouts
         const reviews = await Review.find(query)
@@ -186,7 +278,7 @@ export const getReviewStats = async (req, res) => {
         if (reviews.length === 0) {
             return res.json({
                 success: true,
-                university,
+                university: resolvedUniversity,
                 stats: {
                     overall_rating: 0,
                     total_reviews: 0,
@@ -199,14 +291,14 @@ export const getReviewStats = async (req, res) => {
         const reviewsForPrediction = reviews.map(r => ({
             review_text: r.reviewText || r.review_text || '',
             factor: r.factor || 'General',
-            university: r.university || university,
+            university: r.university || resolvedUniversity,
             city: r.city || 'Pakistan'
         }));
 
         console.log(`[STATS] Sending ${reviewsForPrediction.length} reviews to AI service...`);
 
         // Set a longer timeout for the fetch request (if supported by environment, otherwise rely on limiting data)
-        const response = await fetch('http://localhost:5000/predict/batch', {
+        const response = await fetch(`${PYTHON_SERVICE_URL}/predict/batch`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ reviews: reviewsForPrediction })
@@ -222,9 +314,36 @@ export const getReviewStats = async (req, res) => {
 
         console.log('[STATS] AI Response:', JSON.stringify(aiStats, null, 2));
 
+        // Fix keys for Mongoose schema (e.g., "Job Support" -> "JobSupport")
+        const mappedRatingBreakdown = {};
+        if (aiStats.rating_breakdown) {
+            for (const [k, v] of Object.entries(aiStats.rating_breakdown)) {
+                const schemaKey = k.replace(/\s+/g, '');
+                mappedRatingBreakdown[schemaKey] = v;
+            }
+        }
+
+        // Cache the results in the University document
+        if (universityDoc) {
+            universityDoc.cachedSentiment = {
+                overallRating: aiStats.overall_rating || 0,
+                predictions: aiStats.predictions || [],
+                ratingBreakdown: mappedRatingBreakdown,
+                reviewDistribution: aiStats.review_distribution || {},
+                totalReviews: totalCount,
+                lastAnalyzed: now,
+                reviewsAnalyzedCount: reviews.length
+            };
+            await universityDoc.save();
+            console.log(`[STATS] ✅ Cached sentiment analysis for ${resolvedUniversity}`);
+        } else {
+            console.warn(`[STATS] ⚠️  University document not found, cannot cache results`);
+        }
+
         res.json({
             success: true,
-            university,
+            university: resolvedUniversity,
+            cached: false,
             stats: {
                 overall_rating: aiStats.overall_rating || 0,
                 total_reviews: totalCount, // Return the real total count
