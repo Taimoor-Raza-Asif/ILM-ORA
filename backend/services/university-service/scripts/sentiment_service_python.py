@@ -1,6 +1,8 @@
 # Python-based Sentiment Service for DeBERTA Model
 # This replaces the JavaScript @xenova/transformers approach
 
+import os
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -24,7 +26,7 @@ try:
         problem_type="regression"
     )
     model.eval()
-    print("✓ Model loaded successfully!")
+    print("Model loaded successfully.")
 except Exception as e:
     print(f"Error loading model: {e}")
     print("Please ensure the model files are not corrupted")
@@ -186,10 +188,12 @@ def predict_batch():
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', '5000'))
-    print("\n" + "="*60)
-    print("🚀 University Sentiment Service (Python)")
-    print("="*60)
-    print(f"⚠️  Running on http://0.0.0.0:{port}")
+    print("\n" + "=" * 60)
+    print("University Sentiment Service (Python)")
+    print("=" * 60)
+    print(f"Running on http://0.0.0.0:{port}")
     print("    (Node.js backend uses port 3005)")
-    print("="*60)
+    if model is None:
+        print("WARNING: Model failed to load; /predict will return errors until fixed.")
+    print("=" * 60)
     app.run(host='0.0.0.0', port=port, debug=os.getenv('FLASK_DEBUG', 'false').lower() == 'true')
