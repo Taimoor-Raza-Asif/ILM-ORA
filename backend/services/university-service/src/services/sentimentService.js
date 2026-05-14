@@ -1,10 +1,10 @@
 // ==================== PYTHON AI SERVICE INTEGRATION ====================
 // This service calls the Python Flask API to use the trained AI model
 
+// Empty string = explicitly disabled (e.g. Render free tier without ML container).
+const _pyUrl = process.env.PYTHON_SENTIMENT_URL ?? process.env.PYTHON_SERVICE_URL;
 const PYTHON_SERVICE_URL =
-  process.env.PYTHON_SENTIMENT_URL ||
-  process.env.PYTHON_SERVICE_URL ||
-  'http://localhost:5000';
+  _pyUrl === '' ? null : (_pyUrl || 'http://localhost:5000');
 
 // Factor mapping for normalization
 const FACTOR_MAP = {
@@ -38,6 +38,9 @@ function normalizeFactor(raw) {
  * Predict rating for a single review using Python AI service
  */
 async function predictSingle(review) {
+    if (!PYTHON_SERVICE_URL) {
+        return 3.0;
+    }
     try {
         const response = await fetch(`${PYTHON_SERVICE_URL}/predict`, {
             method: 'POST',
@@ -68,6 +71,10 @@ async function predictSingle(review) {
 async function predictBatch(reviews) {
     if (!Array.isArray(reviews) || reviews.length === 0) {
         throw new Error('Reviews must be a non-empty array');
+    }
+
+    if (!PYTHON_SERVICE_URL) {
+        return reviews.map(() => 3.0);
     }
 
     try {
@@ -113,6 +120,17 @@ async function analyzeReviews(reviews) {
         throw new Error('Reviews array is required');
     }
 
+    if (!PYTHON_SERVICE_URL) {
+        return {
+            overall_rating: 0,
+            predictions: [],
+            rating_breakdown: {},
+            review_distribution: {},
+            total_reviews: reviews.length,
+            note: 'Python sentiment service not configured'
+        };
+    }
+
     try {
         const response = await fetch(`${PYTHON_SERVICE_URL}/predict/batch`, {
             method: 'POST',
@@ -135,6 +153,9 @@ async function analyzeReviews(reviews) {
  * Check if Python AI service is ready
  */
 async function isModelReady() {
+    if (!PYTHON_SERVICE_URL) {
+        return false;
+    }
     try {
         const response = await fetch(`${PYTHON_SERVICE_URL}/health`);
         const data = await response.json();
@@ -148,6 +169,14 @@ async function isModelReady() {
  * Get model status from Python service
  */
 async function getModelStatus() {
+    if (!PYTHON_SERVICE_URL) {
+        return {
+            ready: false,
+            loading: false,
+            error: 'Python sentiment not configured',
+            service: 'disabled'
+        };
+    }
     try {
         const response = await fetch(`${PYTHON_SERVICE_URL}/health`);
         const data = await response.json();

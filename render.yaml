@@ -1,23 +1,10 @@
 # Render Blueprint — ILM-ORA backend (gateway + microservices).
 # https://render.com/docs/infrastructure-as-code
 #
-# After push: Dashboard → New → Blueprint → Connect this repo → apply `render.yaml`.
-# You will be prompted for MongoDB URIs and CORS (see env vars with sync: false).
-# First deploy of ilm-ora-python-sentiment can take a long time (ML image) and may OOM on free RAM.
+# Free tier: the Python DeBERTa container is omitted (needs >512MB RAM). University
+# service uses PYTHON_SENTIMENT_URL="" so APIs degrade gracefully without that ML app.
 
 services:
-  - type: web
-    name: ilm-ora-python-sentiment
-    runtime: docker
-    region: oregon
-    plan: free
-    healthCheckPath: /health
-    rootDir: backend/services/university-service/scripts
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: HF_TOKEN
-        sync: false
-
   - type: web
     name: ilm-ora-auth
     runtime: docker
@@ -78,10 +65,7 @@ services:
       - key: MONGO_URI
         sync: false
       - key: PYTHON_SENTIMENT_URL
-        fromService:
-          name: ilm-ora-python-sentiment
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
+        value: ""
 
   - type: web
     name: ilm-ora-career

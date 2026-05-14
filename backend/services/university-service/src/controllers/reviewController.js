@@ -297,6 +297,21 @@ export const getReviewStats = async (req, res) => {
 
         console.log(`[STATS] Sending ${reviewsForPrediction.length} reviews to AI service...`);
 
+        if (!PYTHON_SERVICE_URL) {
+            console.warn('[STATS] PYTHON_SENTIMENT_URL not set; skipping AI batch (free tier / ML service omitted)');
+            return res.json({
+                success: true,
+                university: resolvedUniversity,
+                cached: false,
+                stats: {
+                    overall_rating: 0,
+                    total_reviews: totalCount,
+                    rating_breakdown: {},
+                    review_distribution: {}
+                }
+            });
+        }
+
         // Set a longer timeout for the fetch request (if supported by environment, otherwise rely on limiting data)
         const response = await fetch(`${PYTHON_SERVICE_URL}/predict/batch`, {
             method: 'POST',
