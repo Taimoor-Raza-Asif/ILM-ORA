@@ -9,7 +9,7 @@ const airH11 = '/images/universities/air-h11.jpg';
 const alKaram = '/images/universities/al-karam.jpg';
 const alKhair = '/images/universities/al-khair.jpg';
 const aiou = '/images/universities/allama-iqbal-uni.jpg';
-const abasyn = '/images/universities/abasyn.png';
+const abasyn = '/images/universities/abasyn.jpg';
 const bahriaE8 = '/images/universities/bahria.jpg';
 const bahriaH11 = '/images/universities/bahria-h11.jpg';
 const bnu = '/images/universities/bnu.jpg';
@@ -17,7 +17,7 @@ const comsats = '/images/universities/comsats.jpg';
 const cust = '/images/universities/cust.jpg';
 const fast = '/images/universities/fast.jpg';
 const fjwu = '/images/universities/fjw.jpg';
-const foundation = '/images/universities/foundation.png';
+const foundation = '/images/universities/foundation.jpg';
 const fuuast = '/images/universities/fuuast.jpg';
 const giki = '/images/universities/giki.jpg';
 const iiui = '/images/universities/iiui.jpg';
@@ -40,10 +40,13 @@ const szabist = '/images/universities/szabist.jpg';
 const szabmu = '/images/universities/szabmu.jpg';
 const apcoms = '/images/universities/apcoms.jpg';
 
-/** Set VITE_UNIVERSITY_LOCAL_IMAGES=true only when JPG/PNG files exist under public/images/universities/. */
+/**
+ * Use mapped files under /images/universities/ (run backend/scripts/download-university-wikipedia-images.mjs).
+ * Set VITE_UNIVERSITY_LOCAL_IMAGES=false to force generated avatars only.
+ */
 const useLocalMappedImages =
   typeof import.meta !== 'undefined' &&
-  import.meta.env?.VITE_UNIVERSITY_LOCAL_IMAGES === 'true';
+  import.meta.env?.VITE_UNIVERSITY_LOCAL_IMAGES !== 'false';
 
 /**
  * Image mapping object

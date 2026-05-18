@@ -20,7 +20,8 @@ frontend/
 
 backend/
 ├── scripts/
-│   └── add-university-images.js (script to add image URLs to data)
+│   ├── add-university-images.js (script to add image URLs to data)
+│   └── download-university-wikipedia-images.mjs (fetch thumbnails from Wikipedia)
 └── shared/
     └── data/
         └── universities data/
@@ -64,6 +65,24 @@ backend/
    cd backend
    node scripts/add-university-images.js
    ```
+
+### Method 1b: Automated download (English Wikipedia)
+
+Thumbnails come from English Wikipedia (`pageimages` and embedded article files), then **Wikimedia Commons** search, then **Clearbit** (`logo.clearbit.com/<domain>`) when `clearbitDomain` is set, then **Google favicons** (`google.com/s2/favicons`) for the same domain if Clearbit is unavailable. Requires internet access and working DNS (including `commons.wikimedia.org` when Commons is used).
+
+From the **repository root**:
+
+```powershell
+node backend/scripts/download-university-wikipedia-images.mjs
+```
+
+Optional dry run (no files written):
+
+```powershell
+node backend/scripts/download-university-wikipedia-images.mjs --dry-run
+```
+
+Files are written to `frontend/public/images/universities/` using the same filenames as `universityImages.js`. If every source fails, that row prints `FAIL` in the console. Set `VITE_UNIVERSITY_LOCAL_IMAGES=false` in the frontend env to use generated avatars only.
 
 ### Method 2: External URLs (CDN/Cloud Storage)
 

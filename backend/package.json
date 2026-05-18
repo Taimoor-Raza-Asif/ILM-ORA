@@ -1,1 +1,8 @@
-{ "name": "backend-monorepo", "private": true, "workspaces": ["services/*"] }
+{
+  "name": "backend-monorepo",
+  "private": true,
+  "workspaces": ["services/*"],
+  "scripts": {
+    "download-uni-images": "node scripts/download-university-wikipedia-images.mjs"
+  }
+}
